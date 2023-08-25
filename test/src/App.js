@@ -1,6 +1,10 @@
 import logo from './logo.svg';
 import './App.css';
 
+const mirisfunction = () => {
+  console.log("Miri is the best");
+}
+
 function App() {
   return (
     <div className="App">
@@ -17,6 +21,7 @@ function App() {
         >
           Learn React
         </a>
+      <button onclick={mirisfunction} ></button>
       </header>
     </div>
   );

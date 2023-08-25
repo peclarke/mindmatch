@@ -4,6 +4,8 @@ import { Button } from "@mui/material";
 
 import './newGame.css';
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import GameScreen from "./game";
 
 const game = [
     {
@@ -13,12 +15,16 @@ const game = [
     {
         "q": "What did Charlotte make me on the first night of Hackathon?",
         "a": "A Hot Chocolate"
+    },
+    {
+        "q": 'Why does music written in a minor key sound "sad" in comparison to major?',
+        "a": "I dunno"
     }
 ]
 
 const FilterConfirms = (message: MessageEvent<any>): boolean => {
     const evt = JSON.parse(message.data);
-    return evt.type === "confirmstart"
+    return evt.type === "startgame"
 }
 
 export const NewGameScreen = () => {
@@ -63,6 +69,8 @@ export const NewGameScreen = () => {
 }
 
 export const LoadingScreen = () => {
+    const { gid } = useParams();
+
     const { sendJsonMessage, readyState } = useWebSocket(WS_URL, {
         onOpen: () => {
           console.log('WebSocket connection established.');
@@ -78,15 +86,19 @@ export const LoadingScreen = () => {
         filter: FilterConfirms
     })
 
-    useEffect(() => console.log(lastJsonMessage), [lastJsonMessage])
+    const qa = lastJsonMessage?.content || null;
 
-    const gameId = lastJsonMessage?.content.gid || "";
+    useEffect(() => console.log("AAAAAAAAAAA", lastJsonMessage), []);
 
     return (
-        <section>
-            <h1>LOADING</h1>
-            {gameId}
-        </section>
+        <>
+            {qa ? <GameScreen {...qa}/>
+                : <section>
+                <h1>LOADING</h1>
+                {gid} vs. {gid}
+                </section>
+            }
+        </>
     )
 }
 

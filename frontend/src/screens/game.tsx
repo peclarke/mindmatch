@@ -1,10 +1,10 @@
 import { Grid } from "@mui/material";
 import UserInput from "../components/input";
-import QuestionCard from "../components/question";
+import QuestionCard, { QuestionCardProps } from "../components/question";
 
 import './game.css';
 
-const GameScreen = () => {
+const GameScreen = (props: QuestionCardProps) => {
     return (
         <section>
             <Grid container>
@@ -14,8 +14,8 @@ const GameScreen = () => {
                 <Grid item xs={4}>
                     <div className="middleColumn">
                         <QuestionCard 
-                            question='Why does music written in a minor key sound "sad" in comparison to major?'
-                            answer="Because minor music flattens the third and that's all I know"
+                            q={props.q}
+                            a={props.a}
                         />
                         <UserInput />
                     </div>

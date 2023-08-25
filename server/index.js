@@ -39,7 +39,8 @@ const typesDef = {
     TURN: 'turn',
     NEW_GAME: 'newgame',
     END_GAME: 'endgame',
-    CONFIRM_START: 'confirmstart'
+    CONFIRM_START: 'confirmstart',
+    START_GAME: 'startgame'
 }
 
 const endGame = {
@@ -107,7 +108,8 @@ function gameEnd() { broadcastMessage(endGame); game = {}; }
 
 function gameCheck(userId) {
     console.log("checking game...")
-    if (game !== null) { 
+    if (game !== null && Object.keys(game).length > 0) { 
+        console.log(game);
         if (game["players"].length < numberOfPlayers) {
             game["players"].push(userId);
         }
@@ -121,6 +123,29 @@ function gameCheck(userId) {
 function gameInit() {
     console.log("BEGIN THE GAME")
     console.log(game);
+
+    // increase the question number and get what we need
+    const newTurn = game["turn"]["number"] + 1;
+
+    game = {
+        ...game,
+        "turn": {
+            number: newTurn
+        }
+    }
+
+    const question = game["qsas"][newTurn-1]["q"];
+    const answer   = game["qsas"][newTurn-1]["a"];
+
+    // send notice to game that we begin
+    broadcastMessage({
+        type: "startgame",
+        content: {
+            question: question,
+            answer:   answer
+        }
+    })
+
 }
 
 

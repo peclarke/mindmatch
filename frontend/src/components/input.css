@@ -1,0 +1,18 @@
+.inputButton {
+    background-color: silver;
+    width: 100%;
+    border-radius: 10%;
+}
+
+.enterBtn {
+    height: 100%;
+}
+
+.actionBtn {
+    display: flex;
+    justify-content: right;
+}
+
+.userInput {
+    margin-top: 2vh;
+}

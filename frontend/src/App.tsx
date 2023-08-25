@@ -1,10 +1,10 @@
-import { useState } from 'react'
 import './App.css'
+import GameScreen from './screens/game'
 
 function App() {
   return (
     <>
-
+      <GameScreen />
     </>
   )
 }

@@ -4,7 +4,7 @@ import { WS_URL } from './globals';
 import GameScreen from './screens/game'
 
 import useWebSocket, { ReadyState } from 'react-use-websocket';
-import NewGameScreen from './screens/newGame';
+import { NewGameScreen } from './screens/newGame';
 
 const getMessage = (message: MessageEvent<any>): boolean => {
   const evt = JSON.parse(message.data);

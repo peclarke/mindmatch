@@ -38,7 +38,8 @@ const typesDef = {
     TEST: "test",
     TURN: 'turn',
     NEW_GAME: 'newgame',
-    END_GAME: 'endgame'
+    END_GAME: 'endgame',
+    CONFIRM_START: 'confirmstart'
 }
 
 const endGame = {
@@ -78,11 +79,6 @@ function handleMessage(message, userId) {
 }
 
 function broadcastMessage(json) {
-    // We are sending the current data to all connected clients
-    // const json = {
-    //     "type": "test",
-    //     "data": "datatatatata"
-    // }
 
     const data = JSON.stringify(json);
 
@@ -148,6 +144,27 @@ function newGame(data, originalPlayer) {
     }
     console.log("init game started")
     // console.log(game);
+
+    // send a message to the client that the game has started
+    sendMessage({
+        type: "confirmstart",
+        content: {
+            "gid": gameId
+        }
+    }, originalPlayer)
+
+}
+
+function sendMessage(data, userId) {
+    const msg = JSON.stringify(data);
+    const client = clients[userId];
+
+    if( client.readyState === WebSocket.OPEN) {
+        client.send(msg);
+    }
+
+    // console.log(msg, client)
+    // client.send(msg);
 }
 
 // A new client connection request received

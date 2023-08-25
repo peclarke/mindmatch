@@ -1,9 +1,14 @@
 body {
     margin: 50px;
+    background-image: url('./5-dots.png');
+    background-repeat: repeat repeat;
+    background-position: center;
+    background-size: auto;
+    background-color: black;
 }
 
 .middleColumn {
     display: flex;
-    justify-content: right;
+    /* justify-content: center; */
     flex-direction: column;
 }

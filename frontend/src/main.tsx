@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 import { LoadingScreen, NewGameScreen } from './screens/newGame.tsx';
 import ErrorElement from './components/error.tsx';
+import GameScreen from './screens/game.tsx';
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
       {
         path: '/play/:gameId',
         element: <LoadingScreen />
+      },
+      {
+        path: '/game',
+        element: <GameScreen q={'Why god?'} a={'So true'}/>
       }
     ]
   } 

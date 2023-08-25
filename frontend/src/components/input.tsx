@@ -1,7 +1,9 @@
-import { Button, Grid, TextField } from '@mui/material';
+import { Button, Grid, TextField, Tooltip } from '@mui/material';
 import { useState } from 'react';
 
 import './input.css';
+// import '../../public/sword.png';
+// import 'shield.png';
 
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 
@@ -21,9 +23,9 @@ const InputButton = (props: InputButtonProps) => {
                     : props.type === "button"
                 ? <Button className="actionBtn" variant="contained">{props.defense ? "shield" : "sword"}</Button>
                     : props.type === "enter"
-                ?   <Button className="enterBtn" variant="contained" fullWidth={true}>
-                        <KeyboardReturnIcon />
-                    </Button>
+                ? <Tooltip title="Submit answer"><Button className="enterBtn" variant="contained" fullWidth={true}>
+                        <KeyboardReturnIcon sx={{height: 128}}/>
+                    </Button></Tooltip>
                     : "bro no way"
             }
         </div>
@@ -46,14 +48,22 @@ const UserInput = () => {
 
     return (
         <Grid container className="userInput" columnSpacing={3}>
-            <Grid container item xs={10} rowSpacing={2}>
-                <Grid item xs={12}>
+            <Grid container item xs={10}>
+                <Grid item xs={12} className="parentAnswerInput">
                     <InputButton type="text"/>
                 </Grid>
                 <Grid item xs={12}>
                     <div className="action-buttons">
-                        <Button className="actionBtn" variant="contained" onChange={() => changePowerUp("sword")}>Sword</Button>
-                        <Button className="actionBtn" variant="contained" onChange={() => changePowerUp("shield")}>Shield</Button>
+                        <Tooltip title="Double your attack">
+                            <Button className="actionBtn" variant="contained" onChange={() => changePowerUp("sword")}>
+                                <img src="./sword.png" alt="double attack button"/>
+                            </Button>
+                        </Tooltip>
+                        <Tooltip title="Defend against opponent">
+                            <Button className="actionBtn" variant="contained" onChange={() => changePowerUp("shield")}>
+                                <img src="./shield.png" alt="defend button"/>
+                            </Button>
+                        </Tooltip>
                     </div>
                 </Grid>
             </Grid>

@@ -38,11 +38,11 @@ function App() {
 
   return (
     <>
-      {/* <GameScreen /> */}
+      <GameScreen q={'Why god?'} a={'The answer is in the details'}/>
       {/* {message}
       <p>LOL WE FUCKING BALL</p>
       <button onClick={test}>asd</button> */}
-      <NewGameScreen />
+      {/* <NewGameScreen /> */}
     </>
   )
 }

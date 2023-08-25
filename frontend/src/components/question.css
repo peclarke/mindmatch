@@ -3,13 +3,31 @@
     /* height: 50vh; */
     /* padding-top: 5vh; */
     height: 40vh;
-    padding: 40px;
+    /* padding-top: 1vh; */
+    margin-top: 5vh;
+}
+
+.questionContent {
+    display: flex;
+    justify-content: left;
+    flex-direction: column;
+    margin-top: -2vh;
+    /* margin-left: -0.5vw; */
+}
+
+.subtitle {
+    background-color: blue;
+    width: 100%;
+}
+
+.MuiTypography-overline {
+    padding-left: 20px;
+    width: auto;
 }
 
 .question {
-    margin-top: 5vw;
+    margin-top: 1vh;
     height: 100%;
-    font-size: 30px;
-    /* background-color: blue; */
-    
+    font-size: 30px;    
+    padding: 20px;
 }

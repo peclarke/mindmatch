@@ -12,24 +12,6 @@ server.listen(port, () => {
 // I'm maintaining all active connections in this object
 const clients = {};
 
-// Maintain the game state here. ONLY ONE GAME AT A TIME FUCKERS.!!!!!!@!@!!!!!!
-
-// game = {
-//     "started": true,
-//     "gid": 123,
-//     user_connections: [0,1],
-//     qsas: [{
-//         q: "Why does music written in a minor key sound 'sad' in comparison to major?",
-//         a: "WHO KNOWS."
-//     }],
-//     turn: {
-//         number: 0, // initially
-//         players: {
-//             "uid": "WHO KNOWS", // potentially still waiting for our second 
-//         }
-//     }
-// }
-
 const numberOfPlayers = 2;
 let game = null;
 

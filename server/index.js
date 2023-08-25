@@ -15,6 +15,7 @@ const clients = {};
 // Maintain the game state here. ONLY ONE GAME AT A TIME FUCKERS.!!!!!!@!@!!!!!!
 
 // game = {
+//     "started": true,
 //     "gid": 123,
 //     user_connections: [0,1],
 //     qsas: [{
@@ -29,18 +30,30 @@ const clients = {};
 //     }
 // }
 
-let game = {};
+const numberOfPlayers = 2;
+let game = null;
 
 // Event types
 const typesDef = { 
     TEST: "test",
-    TURN: 'turn'
+    TURN: 'turn',
+    NEW_GAME: 'newgame',
+    END_GAME: 'endgame'
 }
 
+const endGame = {
+    type: "endgame",
+    content: "endgame"
+}
 
 
 function handleMessage(message, userId) {
     const dataFromClient = JSON.parse(message.toString());
+
+    if (dataFromClient.type === typesDef.NEW_GAME) {
+        newGame(dataFromClient['content'], userId);
+        return;
+    }
 
     if (dataFromClient.type === typesDef.TURN) {
         // check if we have enough turns to start calculations
@@ -64,12 +77,12 @@ function handleMessage(message, userId) {
     }
 }
 
-function broadcastMessage(_json) {
+function broadcastMessage(json) {
     // We are sending the current data to all connected clients
-    const json = {
-        "type": "test",
-        "data": "datatatatata"
-    }
+    // const json = {
+    //     "type": "test",
+    //     "data": "datatatatata"
+    // }
 
     const data = JSON.stringify(json);
 
@@ -83,14 +96,58 @@ function broadcastMessage(_json) {
 
 function handleDisconnect(userId) {
     console.log(`${userId} disconnected.`);
-    // const json = { type: typesDef.USER_EVENT };
-    // const username = users[userId]?.username || userId;
-    // userActivity.push(`${username} left the document`);
-    // json.data = { users, userActivity };
+
+    if (game !== null) {
+        if (game["players"].includes(userId)) {
+            // end the game here
+            gameEnd()
+        }
+    }
 
     delete clients[userId];
-    // delete users[userId];
-    // broadcastMessage(json);
+}
+
+function gameEnd() { broadcastMessage(endGame); game = {}; }
+
+function gameCheck(userId) {
+    console.log("checking game...")
+    if (game !== null) { 
+        if (game["players"].length < numberOfPlayers) {
+            game["players"].push(userId);
+        }
+
+        if (game["players"].length === 2) {
+            gameInit();
+        }
+    }
+}
+
+function gameInit() {
+    console.log("BEGIN THE GAME")
+    console.log(game);
+}
+
+
+/**
+ * When a new game is created but no one is invited yet
+ * @param {} data 
+ */
+function newGame(data, originalPlayer) {
+
+    const gameId = uuidv4();
+    const qsas   = data;
+
+    game = {
+        "gid": gameId,
+        "qsas": qsas,
+        "players": [originalPlayer],
+        "turn": {
+            number: 0,
+            answers: {}
+        }
+    }
+    console.log("init game started")
+    // console.log(game);
 }
 
 // A new client connection request received
@@ -101,6 +158,7 @@ wsServer.on('connection', function(connection) {
   
     // Store the new connection and handle messages
     clients[userId] = connection;
+    // gameQueue.push(userId);
 
     // TODO DEAL WITH MORE THAN 2 FUCKING PEOPLE
 
@@ -109,4 +167,7 @@ wsServer.on('connection', function(connection) {
 
     // User disconnected
     connection.on('close', () => handleDisconnect(userId));
+
+    // check if we're ready to start a game
+    gameCheck(userId);
   });

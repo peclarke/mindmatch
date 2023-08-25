@@ -4,6 +4,7 @@ import { WS_URL } from './globals';
 import GameScreen from './screens/game'
 
 import useWebSocket, { ReadyState } from 'react-use-websocket';
+import NewGameScreen from './screens/newGame';
 
 const getMessage = (message: MessageEvent<any>): boolean => {
   const evt = JSON.parse(message.data);
@@ -26,7 +27,7 @@ function App() {
     filter: getMessage
   })
 
-  const message = lastJsonMessage?.data || "";
+  const message = lastJsonMessage?.data || ""; // lol syntax highlighting fucking sucks
 
   const test = () => {
     sendJsonMessage({
@@ -38,9 +39,10 @@ function App() {
   return (
     <>
       {/* <GameScreen /> */}
-      {message}
+      {/* {message}
       <p>LOL WE FUCKING BALL</p>
-      <button onClick={test}>asd</button>
+      <button onClick={test}>asd</button> */}
+      <NewGameScreen />
     </>
   )
 }

@@ -1,4 +1,15 @@
 .questionCard {
     background-color: red;
-    height: 50vh;
+    /* height: 50vh; */
+    /* padding-top: 5vh; */
+    height: 40vh;
+    padding: 40px;
+}
+
+.question {
+    margin-top: 5vw;
+    height: 100%;
+    font-size: 30px;
+    /* background-color: blue; */
+    
 }

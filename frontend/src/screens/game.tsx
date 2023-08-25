@@ -12,8 +12,13 @@ const GameScreen = () => {
                     {/* maybe some scores for player 1? animation comes form this side */}
                 </Grid>
                 <Grid item xs={4}>
-                    <QuestionCard />
-                    <UserInput />
+                    <div className="middleColumn">
+                        <QuestionCard 
+                            question='Why does music written in a minor key sound "sad" in comparison to major?'
+                            answer="Because minor music flattens the third and that's all I know"
+                        />
+                        <UserInput />
+                    </div>
                 </Grid>
                 <Grid item xs={4}>
 

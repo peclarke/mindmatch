@@ -17,11 +17,13 @@ const InputButton = (props: InputButtonProps) => {
         <div>
             {
                 props.type === "text" 
-                ? <TextField fullWidth={true} className="answerInput" variant="standard" value={answer} onChange={(e) => setAnswer(e.target.value)}></TextField>
+                ? <TextField fullWidth={true} className="answerInput" variant="filled" value={answer} onChange={(e) => setAnswer(e.target.value)}></TextField>
                     : props.type === "button"
                 ? <Button className="actionBtn" variant="contained">{props.defense ? "shield" : "sword"}</Button>
                     : props.type === "enter"
-                ? <Button className="enterBtn"><KeyboardReturnIcon /></Button>
+                ?   <Button className="enterBtn" variant="contained" fullWidth={true}>
+                        <KeyboardReturnIcon />
+                    </Button>
                     : "bro no way"
             }
         </div>
@@ -29,20 +31,33 @@ const InputButton = (props: InputButtonProps) => {
 }
 
 const UserInput = () => {
+    const [powerUp, setPowerUp] = useState<"sword" | "shield" | "">("");
+
+    const changePowerUp = (value: "sword" | "shield" | "") => {
+        if (powerUp === "") {setPowerUp(value); return }
+
+        if (powerUp === value) {
+            // toggle off
+            setPowerUp("");
+        } else {
+            setPowerUp(value);
+        }
+    }
+
     return (
-        <Grid container className="userInput">
-            <Grid container item xs={8} rowSpacing={2}>
+        <Grid container className="userInput" columnSpacing={3}>
+            <Grid container item xs={10} rowSpacing={2}>
                 <Grid item xs={12}>
                     <InputButton type="text"/>
                 </Grid>
-                <Grid item xs={6}>
-                    <InputButton type="button"/>
-                </Grid>
-                <Grid item xs={6}>
-                    <InputButton type="button" defense={true}/>
+                <Grid item xs={12}>
+                    <div className="action-buttons">
+                        <Button className="actionBtn" variant="contained" onChange={() => changePowerUp("sword")}>Sword</Button>
+                        <Button className="actionBtn" variant="contained" onChange={() => changePowerUp("shield")}>Shield</Button>
+                    </div>
                 </Grid>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={2} className="enterGridCell">
                 <InputButton type="enter" />
             </Grid>
         </Grid> 

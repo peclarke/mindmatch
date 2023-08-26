@@ -1,24 +1,32 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { NewGameScreen } from "./newGame";
 import Full2GameLogic from "./full2GameLogic";
+import { NameContext } from "../main";
 
 const FullGameLogic = () => {
+    const [names, setNames] = useState(["Player 1", "Player 2"]);
+    const stateValue = useMemo(
+        () => ({names, setNames}), [names]
+    )
+
     // const [gameStarted, setGameStarted] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
     const [joining, setJoining] = useState<boolean>(false);
 
     return (
         <>
-        {
-            !loading && !joining
-            ? <NewGameScreen 
-                startLoading={() => setLoading(true)}
-                startJoining={() => setJoining(true)}
-              />
-            : <Full2GameLogic
-                joining={joining}
-              />
-        }
+        <NameContext.Provider value={stateValue}>
+            {
+                !loading && !joining
+                ? <NewGameScreen 
+                    startLoading={() => setLoading(true)}
+                    startJoining={() => setJoining(true)}
+                />
+                : <Full2GameLogic
+                    joining={joining}
+                />
+            }
+        </NameContext.Provider>
         </>
     )
 }

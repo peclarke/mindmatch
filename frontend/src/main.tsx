@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { createContext } from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
@@ -12,6 +12,11 @@ import ErrorElement from './components/error.tsx';
 import GameScreen from './screens/game.tsx';
 import FullGameLogic from './screens/fullGameLogic.tsx';
 import FinalScreen from './screens/final/final.tsx';
+
+export const NameContext = createContext(({
+  names: [] as string[],
+  setNames: (_: string[]) => {}
+}));
 
 const router = createBrowserRouter([
   {
@@ -31,7 +36,18 @@ const router = createBrowserRouter([
       },
       {
         path: '/dev',
-        element: <FinalScreen winner="Bill Jeff" loser="Alice Affrey"/>
+        element: <FinalScreen winner="Bill Jeff" loser="Alice Affrey" stats={{
+          winner: {
+            correct: 0,
+            incorrect: 0,
+            avatar: ''
+          },
+          loser: {
+            correct: 0,
+            incorrect: 0,
+            avatar: ''
+          }
+        }}/>
       }
     ]
   } 

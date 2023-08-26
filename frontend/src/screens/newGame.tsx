@@ -3,8 +3,9 @@ import { WS_URL } from "../globals";
 import { Button } from "@mui/material";
 
 import './newGame.css';
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { NameContext } from "../main";
 
 const game = [
     {
@@ -108,6 +109,7 @@ export const LoadingScreen = (props: LoadingScreenProps) => {
 
     return (
         <>
+            <GameStartListener />
             <div className="loading">
                 <h2>Waiting for Player</h2>
                 <span>Copy the link below and send it to a friend</span>
@@ -115,6 +117,37 @@ export const LoadingScreen = (props: LoadingScreenProps) => {
             </div>
         </>
     )
+}
+
+const GameStartConfirm = (message: MessageEvent<any>): boolean => {
+    const evt = JSON.parse(message.data);
+    return evt.type === "confirmstart";
+}
+
+export type GameStartListenerProps = {
+    // p1Change: (name: string) => void;
+    // p2Change: (name: string) => void;
+}
+
+export const GameStartListener = (props: GameStartListenerProps) => {
+    const { setNames } = useContext(NameContext);
+
+    const { lastJsonMessage } = useWebSocket(WS_URL, {
+        share: true,
+        filter: GameStartConfirm
+    })
+
+    useEffect(() => {
+        if (lastJsonMessage) {
+            const { p1, p2 } = lastJsonMessage.content;
+            setNames([p1, p2]);
+
+            // localStorage.setItem("p1-name", p1);
+            // localStorage.setItem("p2-name", p2);
+        }
+    }, [lastJsonMessage]);
+
+    return (<></>)
 }
 
 export const JoinGameScreen = () => {

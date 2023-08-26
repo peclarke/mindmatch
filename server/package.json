@@ -8,6 +8,7 @@
     },
     "author": "paul clarke",
     "dependencies": {
+        "unique-names-generator": "^4.7.1",
         "uuid": "^9.0.0",
         "ws": "^8.13.0"
     }

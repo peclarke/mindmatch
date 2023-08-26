@@ -30,6 +30,7 @@ const PlayerCardWithPowers = (props: PlayerCardProps) => {
     const [messageSent, setMessageSent] = useState<boolean>(false);
 
     useEffect(() => {
+        console.log(lastJsonMessage);
         if (lastJsonMessage) {
             const player = localStorage.getItem('player') === "one" ? 1 : 2;
             if (lastJsonMessage?.content === props.number) {

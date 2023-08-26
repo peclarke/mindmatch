@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { LoadingScreen, NewGameScreen } from "./newGame";
 import GameScreen from "./game";
 import useWebSocket from "react-use-websocket";
 import { WS_URL } from "../globals";
 import { uq_data_set } from "../assets/data";
+import { NameContext } from "../main";
 
 export type GameLogicProps = {
     startGame: () => void;
@@ -62,6 +63,8 @@ const Full2GameLogic = (props: SomeGameLogicProps) => {
 
     // const qas = lastJsonMessage?.content || {};
 
+    const { setNames } = useContext(NameContext);
+
     const [singleQ, setSingleQ] = useState<{q: string; a: string; loaded: boolean}>({q: "", a: "", loaded: false});
     useEffect(() => {
         // start the game, load the first question
@@ -70,6 +73,15 @@ const Full2GameLogic = (props: SomeGameLogicProps) => {
         a: lastJsonMessage?.content["answer"],
         loaded: true
         });
+
+        console.log(lastJsonMessage?.content);
+
+        // sort names
+        setNames([
+            lastJsonMessage?.content["p1"],
+            lastJsonMessage?.content["p2"]
+        ])
+
         // change screens
         if (singleQ.loaded) setGameStarted(true);
 

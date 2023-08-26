@@ -6,13 +6,15 @@ import './game.css';
 import QuestionCard, { QuestionCardProps } from "../components/question/question";
 import UserInput from "../components/input/input";
 import PlayerCard from "../components/player/player";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Nav from "../components/nav";
 import useWebSocket from "react-use-websocket";
 import { WS_URL } from "../globals";
 import { EndGame } from "./full2GameLogic";
 import { SendJsonMessage } from "react-use-websocket/dist/lib/types";
 import { EndTurnListener, NewQuestionListener } from "../components/results";
+import { GameStartListener, p1Name, p2Name } from "./newGame";
+import { NameContext } from "../main";
 
 export type GameScreenProps = {
     q: string;
@@ -85,10 +87,14 @@ const GameScreen = (props: GameScreenProps) => {
         })
     }
 
+    const { names } = useContext(NameContext);
+    
     return (
         <>
         <Nav />
+
         {/* Some listeners for the server */}
+        {/* <GameStartListener /> */}
         <EndTurnListener
             takeHeart={takeHeart}
             useShield={useShield}
@@ -104,7 +110,7 @@ const GameScreen = (props: GameScreenProps) => {
                     {/* maybe some scores for player 1? animation comes form this side */}
                     <PlayerCard 
                         number={1} 
-                        name="Bob Jenkins" 
+                        name={names[0]}
                         lives={lives[1]}
                         sword={!powerUps[1].includes("sword")}
                         shield={!powerUps[1].includes("shield")}
@@ -128,7 +134,7 @@ const GameScreen = (props: GameScreenProps) => {
                 <Grid item xs={4} className="playerColumns">
                     <PlayerCard 
                         number={2} 
-                        name="Alice Actions"  
+                        name={names[1]} 
                         lives={lives[2]}
                         sword={!powerUps[2].includes("sword")}
                         shield={!powerUps[2].includes("shield")}

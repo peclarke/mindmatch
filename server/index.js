@@ -1,6 +1,16 @@
 const { WebSocket, WebSocketServer } = require('ws');
 const http = require('http');
 const uuidv4 = require('uuid').v4;
+const { uniqueNamesGenerator, colors, animals } = require('unique-names-generator');
+
+const customConfig = {
+    dictionaries: [colors, animals],
+    separator: " ",
+    length: 2,
+    style: "capital"
+};
+
+const randomNameGen = () => { return uniqueNamesGenerator(customConfig); }
 
 const server = http.createServer();
 const wsServer = new WebSocketServer({ server });
@@ -233,7 +243,9 @@ function gameInit() {
         type: "startgame",
         content: {
             question: question,
-            answer:   answer
+            answer:   answer,
+            "p1":  game["p1"],
+            "p2":  game["p2"]
         }
     })
 
@@ -249,6 +261,9 @@ function newGame(data, originalPlayer) {
     const gameId = uuidv4();
     const qsas   = data;
 
+    const p1name = randomNameGen();
+    const p2name = randomNameGen();
+
     game = {
         "gid": gameId,
         "qsas": qsas,
@@ -256,18 +271,24 @@ function newGame(data, originalPlayer) {
         "turn": {
             number: 0,
             answers: {}
-        }
+        },
+        "p1": p1name,
+        "p2": p2name
     }
     console.log("init game started")
     console.log("game short aend stout", game);
 
     joinGame(originalPlayer);
 
+    console.log("i am now confirming")
+
     // send a message to the client that the game has started
     sendMessage({
         type: "confirmstart",
         content: {
-            "gid": gameId
+            "gid": gameId,
+            "p1":  p1name,
+            "p2":  p2name
         }
     }, originalPlayer)
 

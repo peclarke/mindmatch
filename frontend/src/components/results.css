@@ -1,0 +1,89 @@
+body {
+    width: 100vw;
+    overflow: hidden;
+}
+
+.animationsPane {
+    position: absolute;
+    margin-top: 10vh;
+    /* background-color: red; */
+    /* width: calc(50vw + 35vw); */
+}
+
+.biganis {
+    display: flex;
+    justify-content: space-between;
+    width: calc(50vw + 25%);
+    margin-left: -25%;
+    height: 40vh;
+    position: absolute;
+    /* background-color: red; */
+}
+
+.biganis2 {
+    display: flex;
+    justify-content: end;
+    /* width: calc(50vw + 25%); */
+    width: calc(50vw + 25%);
+    /* margin-left: -25%; */
+    height: 40vh;
+    position: absolute;
+    background-color: red;
+    /* margin-left: auto;
+    right: 0; */
+    margin-right: -25%;
+    right: 0;
+}
+
+.biganis2>:first-child {
+    transform: scaleX(-1);
+}
+
+.biganis>:first-child {
+    margin-left: -25%;
+    background-color: blue;
+}
+
+.biganis>:last-child {
+    margin-right: -45vw;
+    padding: 0;
+    margin-left: 0;
+    background-color: red;
+    /* margin-left: 50vw; */
+}
+
+.biganis>:nth-child(2) {
+    /* background-color: red; */
+    transform: scaleX(-1);
+
+}
+
+/* .biganis>div {
+    height: 30vh;
+    background-color: blue;
+} */
+
+.left {
+    /* margin-left: -35vw;
+    width: calc(50vw + 35vw); */
+}
+
+.right {
+    /* margin-left: auto; */
+}
+
+#leftanimation, #rightanimation {
+    position: absolute;
+    margin-top: 10vh;
+}
+
+#rightanimation {
+    transform: scaleX(-1);
+    right: 0;
+    margin-right: -10%;
+}
+
+.rightslider {
+    background-color: red;
+    position: absolute;
+}

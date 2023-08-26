@@ -1,6 +1,8 @@
 import useWebSocket from "react-use-websocket"
 import { WS_URL } from "../globals"
 import { useEffect, useState } from "react";
+import anime from 'animejs/lib/anime.es.js';
+import './results.css';
 
 export const EndTurnConfirm = (message: MessageEvent<any>): boolean => {
     const evt = JSON.parse(message.data);
@@ -37,7 +39,7 @@ export const EndTurnListener = (props: EndTurnListenerProps) => {
 
     const [finalAnswer, setFinalAnswer] = useState<FinalAnswer>({});
 
-    const updateState = (results) => {
+    const updateState = (results: any) => {
         if (!results["1"] && !results["2"]) {
             props.takeHeart(3);
         } else if (!results["1"]) {
@@ -48,9 +50,9 @@ export const EndTurnListener = (props: EndTurnListenerProps) => {
     }
 
     useEffect(() => {
-        console.log(lastJsonMessage)
+        // console.log(lastJsonMessage)
         if (lastJsonMessage) {
-            console.log(lastJsonMessage?.content)
+            // console.log(lastJsonMessage?.content)
             setFinalAnswer(lastJsonMessage?.content);
             updateState(lastJsonMessage?.content);
         }
@@ -67,25 +69,70 @@ export const NewQuestionListener = (props: NewQuestionListenerProps) => {
         filter: NewQuestionConfirm
     })
 
+    const delayedResponse = () => {
+        const q = lastJsonMessage?.content["question"];
+        const a = lastJsonMessage?.content["answer"];
+
+        props.setQuestion({
+            q: q,
+            a: a,
+            loaded: true
+        });
+
+        props.setDisabled(false);
+    }
+
+    const moveLeftImage = () => {
+        anime({
+            targets: ".biganis>img:first-child",
+            translateX: {
+                value: "55vw",
+                duration: 1000
+            },
+            opacity: {
+                value: '0',
+                delay: 800,
+                duration: 3000
+            }
+        })
+    }
+
+    const moveRightImage = () => {
+        anime({
+            targets: ".biganis2>img:first-child",
+            scaleX: -1,
+            translateX: {
+                value: "-55vw",
+                duration: 1000
+            },
+            opacity: {
+                value: '0',
+                delay: 800,
+                duration: 3000
+            }
+        })
+    }
+
+    useEffect(() => moveRightImage(), [])
+
     useEffect(() => {
         if (lastJsonMessage) {
-            console.log(lastJsonMessage);
-
-            const q = lastJsonMessage?.content["question"];
-            const a = lastJsonMessage?.content["answer"];
-
-            props.setQuestion({
-                q: q,
-                a: a,
-                loaded: true
-            });
-
-            props.setDisabled(false);
+            moveRightImage();
+            moveLeftImage();
+            setTimeout(delayedResponse, 2000);
         }   
     }, [lastJsonMessage])
 
     return (
-        <></>
+        <>
+        {/* <div className="biganis">
+            <img src="./sword.png"/>
+        </div> */}
+
+        <div className="biganis2">
+            <img src="./sword.png"/>
+        </div>
+        </>
     )
 }
 

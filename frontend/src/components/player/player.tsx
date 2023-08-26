@@ -90,9 +90,16 @@ const EndTurn = (props: EndTurnProps) => {
         filter: EndTurnConfirm
     })
 
+    const resetQuestion = () => props.setMessageSent(false);
+
     useEffect(() => {
         if (lastJsonMessage) {
-            props.setMessageSent(false);
+            // trigger animation here
+
+            // then go to reset stuff
+            // props.setMessageSent(false);
+
+            setTimeout(resetQuestion, 2000);
         }
     }, [lastJsonMessage])
 

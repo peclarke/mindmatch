@@ -5,6 +5,9 @@ import './player.css';
 export type PlayerCardProps = {
     number: 1 | 2;
     name: string;
+    lives: number;
+    sword: boolean;
+    shield: boolean;
 }
 
 const PlayerCardWithPowers = (props: PlayerCardProps) => {
@@ -21,13 +24,20 @@ const PlayerCardWithPowers = (props: PlayerCardProps) => {
             </div>
             <div className={props.number === 1 ? "newPlayerCard newLeft" : "newPlayerCard newRight"}>
                 <div className="row1">
-                    <img src="./heart.png" />
-                    <img src="./heart.png" />
-                    <img src="./heart.png" />
+                    {
+                        [...Array(props.lives).keys()].map(_ => {return (
+                            <img src="./heart.png" />
+                        )})
+                    }
+                    {
+                        [...Array(3-props.lives).keys()].map(_ => {return (
+                            <img src="./heart-used.png" />
+                        )})
+                    }
                 </div>
                 <div className="row2">
-                    <img src="./sword.png" />
-                    <img src="./shield.png" />
+                    <img src={props.sword ? "./sword.png"   : "./sword-used.png"} />
+                    <img src={props.shield ? "./shield.png" : "./shield-used.png"} />
                 </div>
             </div>
         </Paper>

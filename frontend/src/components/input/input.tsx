@@ -48,6 +48,7 @@ const InputButton = (props: InputButtonProps) => {
 export type UserInputProps = {
     disabled: boolean;
     setDisabled: (val: boolean) => void;
+    usedPowerUps: {};
 }
 
 const UserInput = (props: UserInputProps) => {

@@ -1,0 +1,24 @@
+body {
+    margin: 0;
+}
+
+.appNav {
+    display: flex;
+    align-items: center;
+    /* height: 7vh; */
+    background-color: rgb(74, 74, 74);
+    margin: 0px;
+    padding-left: 1vw;
+    color: white;
+    gap: 2em;
+}
+
+.logo {
+    background-color: white;
+    height: 7vh;
+    color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}

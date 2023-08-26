@@ -1,17 +1,21 @@
 import Nav from '../../components/nav';
+import anime from 'animejs/lib/anime.es.js';
 import './final.css';
+import { useEffect } from 'react';
 
 export type StatType = {
     winner: {
         name:      string;
         correct:   number;
         incorrect: number;
+        number:    number;
         avatar:    string;
     },
     loser: {
         name:      string;
         correct:   number;
         incorrect: number;
+        number:    number;
         avatar:    string;
     }
 }
@@ -31,6 +35,24 @@ export type FinalScreenProps = StatType;
  * @returns 
  */
 const FinalScreen = (props: FinalScreenProps) => {
+    useEffect(() => {
+        anime({
+            targets: '.win',
+            scaleY: [0, 1], // Scale from 0 to 1 vertically
+            duration: 1500,
+            direction: "begin"
+        });
+        anime({
+            targets: '.lose',
+            scaleY: [0, 1], // Scale from 0 to 1 vertically
+            duration: 1500,
+            direction: "begin",
+            delay: 500
+        });
+    }, [])
+
+    console.log(props.winner.number);
+
     return (
         <>
         <Nav />
@@ -41,13 +63,13 @@ const FinalScreen = (props: FinalScreenProps) => {
                     <span className="pillarName">{props.winner.name}</span>
                     <span><strong>{props.winner.correct}</strong> correct</span>
                     <span><strong>{props.winner.incorrect}</strong> incorrect</span>
-                    <img src={"./repogotchi1.png"} className="finalAv"/>
+                    <img src={"./repogotchi"+props.winner.number+".png"} className="finalAv"/>
                 </div>
                 <div className="lose">
                     <span className="pillarName">{props.loser.name}</span>
                     <span><strong>{props.loser.correct}</strong> correct</span>
                     <span><strong>{props.loser.incorrect}</strong> incorrect</span>
-                    <img src={"./repogotchi2.png"} className="finalAv"/>
+                    <img src={"./repogotchi"+props.loser.number+".png"} className="finalAv"/>
                 </div>
             </div>
         </section>

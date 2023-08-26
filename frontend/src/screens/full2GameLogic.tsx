@@ -138,7 +138,17 @@ export const FinishListener = (props: FinishListenerProps) => {
     useEffect(() => {
         if (lastJsonMessage) {
             console.log(lastJsonMessage);
-            props.setFinalScreen(lastJsonMessage.content);
+            props.setFinalScreen({
+                ...lastJsonMessage.content,
+                winner: {
+                    ...lastJsonMessage.content.winner,
+                    number: lastJsonMessage.content.winner.number
+                },
+                loser: {
+                    ...lastJsonMessage.content.loser,
+                    number: lastJsonMessage.content.loser.number
+                }
+            });
         }
     }, [lastJsonMessage])
 

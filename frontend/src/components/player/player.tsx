@@ -1,4 +1,4 @@
-import { CircularProgress, Grid, Paper, Typography } from "@mui/material"
+import { CircularProgress, Grid, Paper, Tooltip, Typography } from "@mui/material"
 
 import './player.css';
 import useWebSocket from "react-use-websocket";
@@ -51,7 +51,10 @@ const PlayerCardWithPowers = (props: PlayerCardProps) => {
                     </Typography>
                 </span>
                 <div className="third">
-                    {!messageSent ? <CircularProgress size={30} className="circularProgress"/> : <CheckCircleIcon fontSize={"large"} />}
+                    {!messageSent 
+                        ? <Tooltip title="User is still Answering"><CircularProgress size={30} className="circularProgress"/></Tooltip>
+                        : <Tooltip title="User has Answered"><CheckCircleIcon fontSize={"large"} /></Tooltip>
+                    } 
                 </div>
             </div>
             <div className={props.number === 1 ? "newPlayerCard newLeft" : "newPlayerCard newRight"}>

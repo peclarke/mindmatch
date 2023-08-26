@@ -87,18 +87,24 @@ function finishGame() {
     const winnerArea = didPlayerOneWin() ? game["stats"]["p1"] : game["stats"]["p2"];
     const loserArea  = didPlayerOneWin() ? game["stats"]["p2"] : game["stats"]["p1"];
 
+    const winNumber = didPlayerOneWin() ? 1 : 2;
+    const loseNumber = didPlayerOneWin() ? 2 : 1;
+
+
     broadcastMessage({
         type: "finishgame",
         content: {
             winner: {
                 name: winnerArea.name,
                 correct: winnerArea.correct,
-                incorrect: winnerArea.incorrect
+                incorrect: winnerArea.incorrect,
+                number: winNumber
             },
             loser: {
                 name: loserArea.name,
                 correct: loserArea.correct,
-                incorrect: loserArea.incorrect
+                incorrect: loserArea.incorrect,
+                number: loseNumber
             }
         }
     })

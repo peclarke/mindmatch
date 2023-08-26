@@ -6,6 +6,7 @@
 
 .enterBtn {
     height: 100%;
+    padding-right: 5vw;
 }
 
 .actionBtn {
@@ -29,7 +30,10 @@
 .enterGridCell {
     /* height: 20vh; */
     background-color: rgb(33, 188, 219);
-    padding: 1.38em;
+    /* padding: 1.38em; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .action-buttons {

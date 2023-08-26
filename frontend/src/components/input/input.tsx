@@ -35,7 +35,13 @@ const InputButton = (props: InputButtonProps) => {
                 ? <Button className="actionBtn" variant="contained">{props.defense ? "shield" : "sword"}</Button>
                     : props.type === "enter"
                 ? <Tooltip title="Submit answer">
-                    <Button disabled={props.disabled} onClick={() => props.submitAns ? props.submitAns(answer) : null} className="enterBtn" variant="contained" fullWidth={true}>
+                    <Button 
+                        disabled={props.disabled} 
+                        onClick={() => props.submitAns ? props.submitAns(answer) : null} 
+                        className="enterBtn" 
+                        variant="contained"
+                        // sx={{width: "50%"}}
+                    >
                         <KeyboardReturnIcon sx={{height: 128}}/>
                     </Button>
                   </Tooltip>
@@ -77,7 +83,7 @@ const UserInput = (props: UserInputProps) => {
 
 
     return (
-        <Grid container className="userInput" columnSpacing={3}>
+        <Grid container className="userInput" columnSpacing={0}>
             <Grid container item xs={10}>
                 <Grid item xs={12} className={props.disabled ? "parentAnswerInput disabled" : "parentAnswerInput enabled"}>
                     <InputButton type="text" disabled={props.disabled} submitAns={submitAnswer}/>

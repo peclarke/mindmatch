@@ -3,22 +3,20 @@ import './final.css';
 
 export type StatType = {
     winner: {
+        name:      string;
         correct:   number;
         incorrect: number;
         avatar:    string;
     },
     loser: {
+        name:      string;
         correct:   number;
         incorrect: number;
         avatar:    string;
     }
 }
 
-export type FinalScreenProps = {
-    winner: string;
-    loser:  string;
-    stats:  StatType;
-}
+export type FinalScreenProps = StatType;
 
 /**
  * This screen is shown on one of two win conditions:
@@ -40,15 +38,15 @@ const FinalScreen = (props: FinalScreenProps) => {
             <div className="pillars">
                 <div className="win">
                     <img src="./crown.png" id="crown"/>
-                    <span className="pillarName">{props.winner}</span>
-                    <span><strong>12</strong> correct</span>
-                    <span><strong>3</strong> incorrect</span>
+                    <span className="pillarName">{props.winner.name}</span>
+                    <span><strong>{props.winner.correct}</strong> correct</span>
+                    <span><strong>{props.winner.incorrect}</strong> incorrect</span>
                     <img src={"./repogotchi1.png"} className="finalAv"/>
                 </div>
                 <div className="lose">
-                    <span className="pillarName">{props.loser}</span>
-                    <span><strong>3</strong> correct</span>
-                    <span><strong>12</strong> incorrect</span>
+                    <span className="pillarName">{props.loser.name}</span>
+                    <span><strong>{props.loser.correct}</strong> correct</span>
+                    <span><strong>{props.loser.incorrect}</strong> incorrect</span>
                     <img src={"./repogotchi2.png"} className="finalAv"/>
                 </div>
             </div>

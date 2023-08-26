@@ -38,7 +38,11 @@ const typesDef = {
     PLAYER_TWO_TURN: "playertwoturn",
     END_TURN: "endturn",
     NEW_QUESTION: "newquestion",
-    CONFIRM_TURN: "confirmturn"
+    CONFIRM_TURN: "confirmturn",
+    FINISH_GAME: "finishgame",
+    
+
+    // player dead stuff
 }
 
 function confirmTurn(player) {
@@ -67,6 +71,39 @@ function checkAnswerNumber() {
     }
 }
 
+function didPlayerOneWin() {
+    const correct = game["stats"]["p1"]["correct"];
+    const against = game["stats"]["p2"]["correct"];
+    return correct > against;
+}
+
+function didTie() {
+    const correct = game["stats"]["p1"]["correct"];
+    const against = game["stats"]["p2"]["correct"];
+    return correct === against;
+}
+
+function finishGame() {
+    const winnerArea = didPlayerOneWin() ? game["stats"]["p1"] : game["stats"]["p2"];
+    const loserArea  = didPlayerOneWin() ? game["stats"]["p2"] : game["stats"]["p1"];
+
+    broadcastMessage({
+        type: "finishgame",
+        content: {
+            winner: {
+                name: winnerArea.name,
+                correct: winnerArea.correct,
+                incorrect: winnerArea.incorrect
+            },
+            loser: {
+                name: loserArea.name,
+                correct: loserArea.correct,
+                incorrect: loserArea.incorrect
+            }
+        }
+    })
+}
+
 function nextTurn(currentTurn) {
     const numQuestions = game["qsas"].length;
 
@@ -74,9 +111,7 @@ function nextTurn(currentTurn) {
 
     if (currentTurn >= numQuestions) {
         // TODO: end the game, this is a win condition
-
-        
-        gameEnd();
+        finishGame();
         return;
     } 
     
@@ -105,9 +140,30 @@ function nextTurn(currentTurn) {
 
 }
 
+function statUpdate(oneCorrect, twoCorrect) {
+    game = {
+        ...game,
+        "stats": {
+            "p1": {
+                ...game["stats"]["p1"],
+                correct: game["stats"]["p1"]["correct"] + oneCorrect ? 1 : 0,
+                incorrect: game["stats"]["p1"]["incorrect"] + !oneCorrect ? 1 : 0
+            },
+            "p2": {
+                ...game["stats"]["p2"],
+                correct: game["stats"]["p2"]["correct"] + twoCorrect ? 1 : 0,
+                incorrect: game["stats"]["p2"]["incorrect"] + !twoCorrect ? 1 : 0
+            },
+        }
+    }
+}
+
 function checkAnswer(sysAnswer, answerOne, answerTwo) {
     const oneCorrect = sysAnswer === answerOne;
     const twoCorrect = sysAnswer === answerTwo;
+
+    statUpdate(oneCorrect, twoCorrect);
+
     return {
         1: oneCorrect,
         2: twoCorrect
@@ -161,27 +217,6 @@ function handleMessage(message, userId) {
         confirmTurn(2);
         checkAnswerNumber();
         return;
-    }
-
-    if (dataFromClient.type === typesDef.TURN) {
-        // check if we have enough turns to start calculations
-
-
-        // begin calculations
-
-
-
-        // modify game state
-
-
-        
-        // send off results to our friends
-
-
-        // FUCKING PARTY
-    } else {
-        console.log(dataFromClient);
-        broadcastMessage("asd");
     }
 }
 
@@ -273,7 +308,19 @@ function newGame(data, originalPlayer) {
             answers: {}
         },
         "p1": p1name,
-        "p2": p2name
+        "p2": p2name,
+        "stats": {
+            "p1": {
+                "name": p1name,
+                "correct": 0,
+                "incorrect": 0
+            },
+            "p2": {
+                "name": p2name,
+                "correct": 0,
+                "incorrect": 0
+            }
+        }
     }
     console.log("init game started")
     console.log("game short aend stout", game);

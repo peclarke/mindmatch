@@ -5,6 +5,7 @@ section {
 
 .win {
     height: 70vh;
+    /* height: 100%; */
     background-color: goldenrod;
     color: white;
     position: relative;
@@ -42,10 +43,11 @@ section {
 }
 
 #crown {
-    margin-top: -20vh;
-    margin-bottom: 5vh;  
+    /* margin-top: -20vh;
+    margin-bottom: 5vh;   */
+    margin-top: -130%;
     width: 10vw;
-    position: sticky;
+    position: absolute;
 }
 
 .finalAv {

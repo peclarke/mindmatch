@@ -10,7 +10,7 @@ import { useContext, useEffect, useState } from "react";
 import Nav from "../components/nav";
 import useWebSocket from "react-use-websocket";
 import { WS_URL } from "../globals";
-import { EndGame } from "./full2GameLogic";
+import { EndGame, FinishListener } from "./full2GameLogic";
 import { SendJsonMessage } from "react-use-websocket/dist/lib/types";
 import { EndTurnListener, NewQuestionListener } from "../components/results";
 import { GameStartListener, p1Name, p2Name } from "./newGame";
@@ -27,6 +27,7 @@ export type GameScreenProps = {
         loaded: boolean;
     }>>
     setInputDisabled: (val: boolean) => void;
+    setFinalScreen: (stats: StatType) => void;
 }
 
 const GameScreen = (props: GameScreenProps) => {
@@ -94,6 +95,7 @@ const GameScreen = (props: GameScreenProps) => {
         <Nav />
 
         {/* Some listeners for the server */}
+        <FinishListener setFinalScreen={props.setFinalScreen}/>
         {/* <GameStartListener /> */}
         <EndTurnListener
             takeHeart={takeHeart}

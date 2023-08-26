@@ -5,6 +5,7 @@ import useWebSocket from "react-use-websocket";
 import { WS_URL } from "../globals";
 import { uq_data_set } from "../assets/data";
 import { NameContext } from "../main";
+import FinalScreen, { StatType } from "./final/final";
 
 export type GameLogicProps = {
     startGame: () => void;
@@ -42,9 +43,17 @@ export const EndGame = (e: MessageEvent<any>): boolean => {
 
 const Full2GameLogic = (props: SomeGameLogicProps) => {
 
-    const [qa, setQa] = useState(uq_data_set);
+    // const [qa, setQa] = useState(uq_data_set);
+    const [qa, setQa] = useState(game);
     const [gameStarted, setGameStarted] = useState<boolean>(false);
     const [inputDisabled, setInputDisabled] = useState<boolean>(false);
+
+    const [finalScreen, setFinalScreen] = useState<StatType | null>(null);
+
+    const moveIntoFinal = () => {
+        // setFinalScreen(true);
+
+    }
 
     const { sendJsonMessage, readyState } = useWebSocket(WS_URL, {
         onOpen: () => {
@@ -96,17 +105,44 @@ const Full2GameLogic = (props: SomeGameLogicProps) => {
                     qa={qa}
                     joining={props.joining}
                />
-            : <GameScreen 
+            : finalScreen === null ? <GameScreen 
                 q={singleQ["q"]} 
                 a={singleQ["a"]} 
                 sendMessage={sendJsonMessage}
                 setSingle={setSingleQ}
                 inputDisabled={inputDisabled}
                 setInputDisabled={setInputDisabled}
+                setFinalScreen={setFinalScreen}
                />
+            : <FinalScreen winner={finalScreen.winner} loser={finalScreen.loser}/>
         }
         </>
     )
+}
+
+const FinishFilter = (message: MessageEvent<any>): boolean => {
+    const evt = JSON.parse(message.data);
+    return evt.type === "finishgame";
+}
+
+type FinishListenerProps = {
+    setFinalScreen: (stats: StatType) => void;
+}
+
+export const FinishListener = (props: FinishListenerProps) => {
+    const { lastJsonMessage } = useWebSocket(WS_URL, {
+        share: true,
+        filter: FinishFilter
+    })
+
+    useEffect(() => {
+        if (lastJsonMessage) {
+            console.log(lastJsonMessage);
+            props.setFinalScreen(lastJsonMessage.content);
+        }
+    }, [lastJsonMessage])
+
+    return (<></>)
 }
 
 export default Full2GameLogic;

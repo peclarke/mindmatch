@@ -28,14 +28,14 @@
 
 .enterGridCell {
     /* height: 20vh; */
-    background-color: green;
+    background-color: rgb(33, 188, 219);
     padding: 1.38em;
 }
 
 .action-buttons {
     display: flex;
     justify-content: right;
-    background-color: green;
+    background-color: rgb(33, 188, 219);
     padding: 1em;
     gap: 1em;
 }
@@ -46,6 +46,10 @@
 }
 
 .parentAnswerInput {
-    background-color: white;
+    /* background-color: white; */
     padding: 20px;
+}
+
+.img-disabled {
+    opacity: 0.4;
 }

@@ -1,5 +1,6 @@
 .questionCard {
-    background-color: red;
+    /* background-color: red; */
+    /* background-image: url('./white_carbon.webp'); */
     /* height: 50vh; */
     /* padding-top: 5vh; */
     height: 40vh;
@@ -15,8 +16,17 @@
     /* margin-left: -0.5vw; */
 }
 
+.enabled {
+    background-color: white;
+}
+
+.disabled {
+    background-color: gray;
+}
+
 .subtitle {
-    background-color: blue;
+    /* background-color: silver; */
+    background-image: url('./white_carbon.webp');
     width: 100%;
 }
 

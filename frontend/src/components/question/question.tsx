@@ -7,12 +7,15 @@ import './question.css';
 export type QuestionCardProps = {
     q: string;
     a: string;
+    disabled: boolean;
 }
 
 const QuestionCard = (props: QuestionCardProps) => {
+
+
     return (
-        <div className="questionCard">
-            <div className="questionContent">
+        <div className={!props.disabled ? "questionCard enabled" : "questionCard disabled"}>
+            <div className={!props.disabled ? "questionContent enabled" : "questionContent disabled"}>
                 <Typography variant="overline" className="subtitle">
                     YOUR QUESTION:
                 </Typography>

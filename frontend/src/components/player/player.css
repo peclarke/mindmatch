@@ -1,0 +1,138 @@
+.playerCard {
+    height: 20vh;
+    width: 40vh;
+    display: flex;
+    align-items: center;
+    /* justify-content: left; */
+}
+
+.left {
+    margin-left: auto;
+    margin-right: 8vw;
+    flex-direction: row-reverse;
+    justify-content: left;
+    /* padding-left: 1vw; */
+}
+
+.right {
+    margin-right: auto;
+    margin-left: 8vw;
+    justify-content: right;
+    /* padding-right: 1vw; */
+}
+
+.health {
+    display: flex;
+    gap: 1em;
+}
+
+.left>.health {
+    justify-content: left;
+}
+
+.right>.health {
+    justify-content: right;
+}
+
+.health>img {
+    height: 5vh;
+}
+
+.avatar {
+    /* height: 130%; */
+    width: 150%;
+    margin-top: -7vh;
+    /* background-color: red; */
+}
+
+.info>span {
+    padding: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: -2vh;
+    /* background-image: url('./triangles.webp'); */
+    /* background-color: white; */
+}
+
+.right>.info>span {
+    width: 100%;
+}
+
+.left>.info>span {
+    /* background-color: red; */
+}
+
+.left>.info {
+    text-align: right;
+    /* justify-content: right; */
+    border-radius: 15% 0 3% 0;
+}
+
+.right>.info {
+    text-align: left;
+    border-radius: 0 15% 0 3%;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    width: 200vh;
+    height: 100%;
+    margin-top: auto;
+    margin-bottom: auto;
+    background-color: white;
+}
+
+.left>.info>.avatar {
+    margin-right: -3vw;
+    /* background-color: red; */
+}
+
+.right>.info>.avatar {
+    margin-left: -3vw;
+}
+
+.heart {
+    height: 40%;
+}
+
+.newPlayerCard {
+    display: flex;
+    flex-direction: column;
+    /* gap: 1em; */
+    padding: 3vh;
+    /* background-color */
+}
+
+.row1 {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    background-color: white;
+    padding: 1vh;
+    /* border-radius: 15%; */
+    border-radius: 15% 15% 0 0;
+}
+
+.row2 {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    background-color: white;
+    padding: 1vh;
+    /* border-radius: 15%; */
+    border-radius: 0 0 15% 15%;
+}
+
+.newLeft>.row1, .newLeft>.row2 {
+    justify-content: left;
+}
+
+.newRight>.row1, .newRight>.row2 {
+    justify-content: right;
+    flex-direction: row-reverse;
+}
+
+.newPlayerCard>.row1>img, .newPlayerCard>.row2>img {
+    width: 25%;
+}

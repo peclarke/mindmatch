@@ -5,7 +5,6 @@ body {
 .appNav {
     display: flex;
     align-items: center;
-    /* height: 7vh; */
     background-color: rgb(74, 74, 74);
     margin: 0px;
     padding-left: 1vw;
@@ -24,4 +23,13 @@ body {
     padding-right: 1.2vw;
 
     cursor: pointer;
+}
+
+.newGame {
+    cursor: pointer;
+    height: 7vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }

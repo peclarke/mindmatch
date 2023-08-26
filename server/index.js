@@ -22,7 +22,8 @@ const typesDef = {
     NEW_GAME: 'newgame',
     END_GAME: 'endgame',
     CONFIRM_START: 'confirmstart',
-    START_GAME: 'startgame'
+    START_GAME: 'startgame',
+    JOIN_GAME: 'joingame'
 }
 
 const endGame = {
@@ -36,6 +37,11 @@ function handleMessage(message, userId) {
 
     if (dataFromClient.type === typesDef.NEW_GAME) {
         newGame(dataFromClient['content'], userId);
+        return;
+    }
+
+    if (dataFromClient.type === typesDef.JOIN_GAME) {
+        joinGame(userId);
         return;
     }
 
@@ -62,12 +68,11 @@ function handleMessage(message, userId) {
 }
 
 function broadcastMessage(json) {
-
     const data = JSON.stringify(json);
-
     for (let userId in clients) {
       let client = clients[userId];
       if(client.readyState === WebSocket.OPEN) {
+        console.log("sending data", data);
         client.send(data);
       }
     };
@@ -88,19 +93,24 @@ function handleDisconnect(userId) {
 
 function gameEnd() { broadcastMessage(endGame); game = {}; }
 
-function gameCheck(userId) {
-    console.log("checking game...")
-    if (game !== null && Object.keys(game).length > 0) { 
-        console.log(game);
-        if (game["players"].length < numberOfPlayers) {
-            game["players"].push(userId);
-        }
+function joinGame(userId) {
+    game["players"].push(userId);
 
-        if (game["players"].length === 2) {
-            gameInit();
-        }
-    }
+    if (game["players"].length === 2) gameInit();
 }
+
+// function gameCheck(userId) {
+//     if (game !== null && Object.keys(game).length > 0) { 
+//         console.log(game);
+//         if (game["players"].length < numberOfPlayers) {
+//             game["players"].push(userId);
+//         }
+
+//         if (game["players"].length === 2) {
+//             gameInit();
+//         }
+//     }
+// }
 
 function gameInit() {
     console.log("BEGIN THE GAME")
@@ -116,10 +126,15 @@ function gameInit() {
         }
     }
 
+    console.log("ooga booga ooga booga");
+    console.log(game)
+
     const question = game["qsas"][newTurn-1]["q"];
     const answer   = game["qsas"][newTurn-1]["a"];
 
     // send notice to game that we begin
+    console.log(question, answer, "SENDING NOW....")
+
     broadcastMessage({
         type: "startgame",
         content: {
@@ -143,14 +158,16 @@ function newGame(data, originalPlayer) {
     game = {
         "gid": gameId,
         "qsas": qsas,
-        "players": [originalPlayer],
+        "players": [],
         "turn": {
             number: 0,
             answers: {}
         }
     }
     console.log("init game started")
-    // console.log(game);
+    console.log("game short aend stout", game);
+
+    joinGame(originalPlayer);
 
     // send a message to the client that the game has started
     sendMessage({
@@ -169,9 +186,6 @@ function sendMessage(data, userId) {
     if( client.readyState === WebSocket.OPEN) {
         client.send(msg);
     }
-
-    // console.log(msg, client)
-    // client.send(msg);
 }
 
 // A new client connection request received
@@ -193,5 +207,5 @@ wsServer.on('connection', function(connection) {
     connection.on('close', () => handleDisconnect(userId));
 
     // check if we're ready to start a game
-    gameCheck(userId);
+    // gameCheck(userId);
   });

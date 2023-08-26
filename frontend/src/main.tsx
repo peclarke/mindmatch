@@ -10,22 +10,23 @@ import {
 import { LoadingScreen, NewGameScreen } from './screens/newGame.tsx';
 import ErrorElement from './components/error.tsx';
 import GameScreen from './screens/game.tsx';
+import FullGameLogic from './screens/fullGameLogic.tsx';
 
 const router = createBrowserRouter([
   {
     errorElement: <ErrorElement />,
     children: [
+      // {
+      //   path: '/',
+      //   element: <NewGameScreen />
+      // },
+      // {
+      //   path: '/play/:gameId',
+      //   element: <LoadingScreen />
+      // },
       {
         path: '/',
-        element: <NewGameScreen />
-      },
-      {
-        path: '/play/:gameId',
-        element: <LoadingScreen />
-      },
-      {
-        path: '/game',
-        element: <GameScreen q={'Why god?'} a={'So true'}/>
+        element: <FullGameLogic />
       }
     ]
   } 

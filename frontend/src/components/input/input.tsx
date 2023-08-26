@@ -89,7 +89,7 @@ const UserInput = (props: UserInputProps) => {
                     <InputButton type="text" disabled={props.disabled} submitAns={submitAnswer}/>
                 </Grid>
                 <Grid item xs={12}>
-                    <div className="action-buttons">
+                    <div className={!props.disabled ? "action-buttons input-enabled" : "action-buttons input-disabled"}>
                         <Tooltip title="Double your attack">
                             <Button disabled={props.disabled} className="actionBtn" variant="contained" onChange={() => changePowerUp("sword")}>
                                 <img src="./sword.png" alt="double attack button" className={props.disabled ? "img-disabled" : "" }/>
@@ -103,7 +103,7 @@ const UserInput = (props: UserInputProps) => {
                     </div>
                 </Grid>
             </Grid>
-            <Grid item xs={2} className="enterGridCell">
+            <Grid item xs={2} className={!props.disabled ? "enterGridCell input-enabled" : "enterGridCell input-disabled"}>
                 <InputButton disabled={props.disabled} type="enter" submitAns={submitAnswer}/>
             </Grid>
         </Grid> 

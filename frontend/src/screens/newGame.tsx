@@ -4,8 +4,7 @@ import { Button } from "@mui/material";
 
 import './newGame.css';
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import GameScreen from "./game";
+import { useNavigate } from "react-router-dom";
 
 const game = [
     {
@@ -27,25 +26,14 @@ const FilterConfirms = (message: MessageEvent<any>): boolean => {
     return evt.type === "startgame"
 }
 
-export const NewGameScreen = () => {
-    const { sendJsonMessage, readyState } = useWebSocket(WS_URL, {
-        onOpen: () => {
-          console.log('WebSocket connection established.');
-        },
-        share: true,
-        filter: () => false,
-        retryOnError: true,
-        shouldReconnect: () => true
-      });
+export type NewGameScreenProps = {
+    startLoading: () => void;
+    startJoining: () => void;
+}
 
-    const [qa, setQa] = useState<any>(game);
+export const NewGameScreen = (props: NewGameScreenProps) => {
 
-    const createGame = () => {
-        sendJsonMessage({
-            type: "newgame",
-            content: qa
-        })
-    }
+    const [qa, setQa] = useState<any>({});
 
     const importAnki = () => {
 
@@ -53,33 +41,55 @@ export const NewGameScreen = () => {
 
         setQa({});
     }
+
+    const nav = useNavigate();
+
+    useEffect(() => setQa(qa), []);
  
     return (
         <div className="newgame">
             <span id="newgametitle">New Game</span>
             <div>
-                <Button variant="contained">Import Anki</Button>
+                <Button variant="contained" onClick={() => nav("/game")}>Import Anki</Button>
             </div>
             <div>
-                <Button variant="contained" onClick={createGame}>Create Game</Button>
+                <Button variant="contained" onClick={() => props.startLoading()}>Create Game</Button>
             </div>
-            <LoadingScreen />
+            <div>
+                <Button variant="contained" onClick={() => props.startJoining()}>Join Game</Button>
+            </div>
         </div>
     )
 }
 
-export const LoadingScreen = () => {
-    const { gid } = useParams();
+export type LoadingScreenProps = {
+    qa: {};
+    startGame: () => void;
+    joining: boolean;
+}
 
+export const LoadingScreen = (props: LoadingScreenProps) => {
     const { sendJsonMessage, readyState } = useWebSocket(WS_URL, {
-        onOpen: () => {
-          console.log('WebSocket connection established.');
-        },
         share: true,
         filter: () => false,
         retryOnError: true,
         shouldReconnect: () => true
-      });
+    })
+
+    const createGame = () => {
+        // if we're joining the game, don't create one
+        if (props.joining) {
+            sendJsonMessage({
+                type: "joingame",
+                content: ""
+            })
+        } else {
+            sendJsonMessage({
+                type: "newgame",
+                content: props.qa
+            })
+        }
+    }
 
     const { lastJsonMessage } = useWebSocket(WS_URL, {
         share: true,
@@ -88,18 +98,31 @@ export const LoadingScreen = () => {
 
     const qa = lastJsonMessage?.content || null;
 
-    useEffect(() => console.log("AAAAAAAAAAA", lastJsonMessage), []);
+    useEffect(() => console.log(lastJsonMessage), []);
+
+    useEffect(() => createGame(), [])
 
     return (
         <>
-            {qa ? <GameScreen {...qa}/>
-                : <section>
-                <h1>LOADING</h1>
-                {gid} vs. {gid}
-                </section>
-            }
+            <div className="loading">
+                <h2>Waiting for Player</h2>
+                <span>Copy the link below and send it to a friend</span>
+                <input value={window.location.href} />
+            </div>
         </>
     )
 }
 
-// export default NewGameScreen;
+export const JoinGameScreen = () => {
+    const { sendJsonMessage, readyState } = useWebSocket(WS_URL, {
+        onOpen: () => {
+          console.log('WebSocket connection established.');
+        },
+        share: true,
+        filter: () => false,
+        retryOnError: true,
+        shouldReconnect: () => true
+      });
+
+    
+}

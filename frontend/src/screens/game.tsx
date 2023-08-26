@@ -8,6 +8,8 @@ import UserInput from "../components/input/input";
 import PlayerCard from "../components/player/player";
 import { useEffect, useState } from "react";
 import Nav from "../components/nav";
+import useWebSocket from "react-use-websocket";
+import { WS_URL } from "../globals";
 
 export type GameScreenProps = {
     q: string;
@@ -47,6 +49,16 @@ const GameScreen = (props: GameScreenProps) => {
             [player]: lives[player] - 1
         })
     }
+
+    const { sendJsonMessage, readyState } = useWebSocket(WS_URL, {
+        onOpen: () => {
+          console.log('WebSocket connection established.');
+        },
+        share: true,
+        filter: () => false,
+        retryOnError: true,
+        shouldReconnect: () => true
+      });
 
     return (
         <>

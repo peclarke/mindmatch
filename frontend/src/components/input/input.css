@@ -27,9 +27,17 @@
 
 }
 
+.input-enabled {
+    background-color: rgb(33, 188, 219);
+}
+
+.input-disabled {
+    background-color: gray;
+}
+
 .enterGridCell {
     /* height: 20vh; */
-    background-color: rgb(33, 188, 219);
+    /* background-color: rgb(33, 188, 219); */
     /* padding: 1.38em; */
     display: flex;
     justify-content: center;
@@ -39,7 +47,7 @@
 .action-buttons {
     display: flex;
     justify-content: right;
-    background-color: rgb(33, 188, 219);
+    /* background-color: rgb(33, 188, 219); */
     padding: 1em;
     gap: 1em;
 }

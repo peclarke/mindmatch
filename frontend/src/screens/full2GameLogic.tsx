@@ -3,6 +3,7 @@ import { LoadingScreen, NewGameScreen } from "./newGame";
 import GameScreen from "./game";
 import useWebSocket from "react-use-websocket";
 import { WS_URL } from "../globals";
+import { uq_data_set } from "../assets/data";
 
 export type GameLogicProps = {
     startGame: () => void;
@@ -40,8 +41,9 @@ export const EndGame = (e: MessageEvent<any>): boolean => {
 
 const Full2GameLogic = (props: SomeGameLogicProps) => {
 
-    const [qa, setQa] = useState(game);
+    const [qa, setQa] = useState(uq_data_set);
     const [gameStarted, setGameStarted] = useState<boolean>(false);
+    const [inputDisabled, setInputDisabled] = useState<boolean>(false);
 
     const { sendJsonMessage, readyState } = useWebSocket(WS_URL, {
         onOpen: () => {
@@ -82,7 +84,14 @@ const Full2GameLogic = (props: SomeGameLogicProps) => {
                     qa={qa}
                     joining={props.joining}
                />
-            : <GameScreen q={singleQ["q"]} a={singleQ["a"]}/>
+            : <GameScreen 
+                q={singleQ["q"]} 
+                a={singleQ["a"]} 
+                sendMessage={sendJsonMessage}
+                setSingle={setSingleQ}
+                inputDisabled={inputDisabled}
+                setInputDisabled={setInputDisabled}
+               />
         }
         </>
     )

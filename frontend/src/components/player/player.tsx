@@ -1,6 +1,10 @@
-import { Grid, Paper, Typography } from "@mui/material"
+import { CircularProgress, Grid, Paper, Typography } from "@mui/material"
 
 import './player.css';
+import useWebSocket from "react-use-websocket";
+import { WS_URL } from "../../globals";
+import { useEffect, useState } from "react";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 export type PlayerCardProps = {
     number: 1 | 2;
@@ -8,9 +12,28 @@ export type PlayerCardProps = {
     lives: number;
     sword: boolean;
     shield: boolean;
+    // answerSent: boolean;
+}
+
+const ConfirmPlayerTurn = (message: MessageEvent<any>): boolean => {
+    const evt = JSON.parse(message.data);
+    return evt.type === "confirmturn";
 }
 
 const PlayerCardWithPowers = (props: PlayerCardProps) => {
+    const { lastJsonMessage } = useWebSocket(WS_URL, {
+        share: true,
+        filter: ConfirmPlayerTurn
+    })
+
+    const [messageSent, setMessageSent] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (lastJsonMessage) {
+
+        }
+    }, [lastJsonMessage])
+
     return (
         <>
         <Paper elevation={3} className={props.number === 1 ? "playerCard left" : "playerCard right"} sx={{backgroundColor: "rgb(255,255,255,0.8)"}}>
@@ -18,9 +41,12 @@ const PlayerCardWithPowers = (props: PlayerCardProps) => {
                 <img src={"./repogotchi"+props.number+".png"} className="avatar"/>
                 <span>
                     <Typography variant="h6">
-                        {props.name}
+                        <strong>{props.name}</strong>
                     </Typography>
                 </span>
+                <div className="third">
+                    {!messageSent ? <CircularProgress size={30} className="circularProgress"/> : <CheckCircleIcon />}
+                </div>
             </div>
             <div className={props.number === 1 ? "newPlayerCard newLeft" : "newPlayerCard newRight"}>
                 <div className="row1">

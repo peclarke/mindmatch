@@ -79,11 +79,15 @@ export const LoadingScreen = (props: LoadingScreenProps) => {
     const createGame = () => {
         // if we're joining the game, don't create one
         if (props.joining) {
+            localStorage.setItem("player", "two");
+
             sendJsonMessage({
                 type: "joingame",
                 content: ""
             })
         } else {
+            localStorage.setItem("player", "one");
+
             sendJsonMessage({
                 type: "newgame",
                 content: props.qa
@@ -122,7 +126,5 @@ export const JoinGameScreen = () => {
         filter: () => false,
         retryOnError: true,
         shouldReconnect: () => true
-      });
-
-    
+      });  
 }

@@ -23,14 +23,86 @@ const typesDef = {
     END_GAME: 'endgame',
     CONFIRM_START: 'confirmstart',
     START_GAME: 'startgame',
-    JOIN_GAME: 'joingame'
+    JOIN_GAME: 'joingame',
+    PLAYER_ONE_TURN: "playeroneturn",
+    PLAYER_TWO_TURN: "playertwoturn",
+    END_TURN: "endturn",
+    NEW_QUESTION: "newquestion",
+    CONFIRM_TURN: "confirmturn"
 }
 
-const endGame = {
-    type: "endgame",
-    content: "endgame"
+function confirmTurn(player) {
+    broadcastMessage({
+        type: "confirmturn",
+        content: player
+    })
 }
 
+function checkAnswerNumber() {
+    if (Object.keys(game["turn"]["answers"]).length === 2) {
+        console.log("All answers have been given")
+        // get all relevant information from state
+        const turnNumber = game["turn"]["number"];
+        const sysAnswer  = game["qsas"][turnNumber-1]["a"];
+        const answerOne  = game["turn"]["answers"]["1"];
+        const answerTwo  = game["turn"]["answers"]["2"];
+
+        const result = checkAnswer(sysAnswer, answerOne, answerTwo);
+        broadcastMessage({
+            type: "endturn",
+            content: result
+        })
+
+        nextTurn(turnNumber);
+    }
+}
+
+function nextTurn(currentTurn) {
+    const numQuestions = game["qsas"].length;
+
+    console.log(numQuestions, currentTurn);
+
+    if (currentTurn >= numQuestions) {
+        // TODO: end the game, this is a win condition
+
+        
+        gameEnd();
+        return;
+    } 
+    
+    game = {
+        ...game,
+        "turn": {
+            number: game["turn"]["number"] + 1,
+            answers: {}
+        }
+    }
+
+    const question = game["qsas"][currentTurn]["q"];
+    const answer   = game["qsas"][currentTurn]["a"];
+
+    // send notice to game that we begin
+    console.log(question, answer, "SENDING NOW....")
+
+    broadcastMessage({
+        type: "newquestion",
+        content: {
+            "question": question,
+            "answer":   answer
+        }
+    })
+
+
+}
+
+function checkAnswer(sysAnswer, answerOne, answerTwo) {
+    const oneCorrect = sysAnswer === answerOne;
+    const twoCorrect = sysAnswer === answerTwo;
+    return {
+        1: oneCorrect,
+        2: twoCorrect
+    }
+}
 
 function handleMessage(message, userId) {
     const dataFromClient = JSON.parse(message.toString());
@@ -42,6 +114,42 @@ function handleMessage(message, userId) {
 
     if (dataFromClient.type === typesDef.JOIN_GAME) {
         joinGame(userId);
+        return;
+    }
+
+    if (dataFromClient.type === typesDef.PLAYER_ONE_TURN) {
+        game = {
+            ...game,
+            "turn": {
+                ...game["turn"],
+                answers: {
+                    ...game["turn"]["answers"],
+                    1: dataFromClient.content
+                }
+            }
+        }
+
+        console.log("PLAYER ONE HAS GIVEN AN ANSWER:")
+        confirmTurn(1);
+        checkAnswerNumber();
+        return;
+    }
+
+    if (dataFromClient.type === typesDef.PLAYER_TWO_TURN) {
+        console.log('player two turn....')
+        game = {
+            ...game,
+            "turn": {
+                ...game["turn"],
+                answers: {
+                    ...game["turn"]["answers"],
+                    2: dataFromClient.content
+                }
+            }
+        }
+        console.log("PLAYER TWO HAS GIVEN AN ANSWER:")
+        confirmTurn(2);
+        checkAnswerNumber();
         return;
     }
 
@@ -81,14 +189,6 @@ function broadcastMessage(json) {
 function handleDisconnect(userId) {
     console.log(`${userId} disconnected.`);
     gameEnd()
-
-    // if (game !== null && Object.keys(game).length > 0) {
-    //     if (game["players"].includes(userId)) {
-    //         // end the game here
-    //         gameEnd()
-    //     }
-    // }
-
     delete clients[userId];
 }
 
@@ -105,19 +205,6 @@ function joinGame(userId) {
 
     if (game["players"].length === 2) gameInit();
 }
-
-// function gameCheck(userId) {
-//     if (game !== null && Object.keys(game).length > 0) { 
-//         console.log(game);
-//         if (game["players"].length < numberOfPlayers) {
-//             game["players"].push(userId);
-//         }
-
-//         if (game["players"].length === 2) {
-//             gameInit();
-//         }
-//     }
-// }
 
 function gameInit() {
     console.log("BEGIN THE GAME")

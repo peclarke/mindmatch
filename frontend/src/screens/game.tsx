@@ -11,14 +11,24 @@ import Nav from "../components/nav";
 import useWebSocket from "react-use-websocket";
 import { WS_URL } from "../globals";
 import { EndGame } from "./full2GameLogic";
+import { SendJsonMessage } from "react-use-websocket/dist/lib/types";
+import { EndTurnListener, NewQuestionListener } from "../components/results";
 
 export type GameScreenProps = {
     q: string;
     a: string;
+    inputDisabled: boolean;
+    sendMessage: SendJsonMessage;
+    setSingle: React.Dispatch<React.SetStateAction<{
+        q: string;
+        a: string;
+        loaded: boolean;
+    }>>
+    setInputDisabled: (val: boolean) => void;
 }
 
 const GameScreen = (props: GameScreenProps) => {
-    const [inputDisabled, setInputDisabled] = useState<boolean>(false);
+    // const [inputDisabled, setInputDisabled] = useState<boolean>(false);
 
     const [lives, setLives] = useState({
         1: 3,
@@ -36,10 +46,11 @@ const GameScreen = (props: GameScreenProps) => {
     })
 
     useEffect(() => {
-        console.log('first end game')
-        console.log(lastJsonMessage)
+        // console.log('first end game')
+        // console.log(lastJsonMessage)
         if (lastJsonMessage) {
-            console.log("end game")
+            // console.log("end game")
+            localStorage.clear();
             window.location.reload();
         }
     }, [lastJsonMessage]);
@@ -59,25 +70,34 @@ const GameScreen = (props: GameScreenProps) => {
     }
 
     const takeHeart = (player: number) => {
+        if (player === 3) {
+            setLives({
+                ...lives,
+                1: lives[1] - 1,
+                2: lives[2] - 1
+            })
+            return;
+        }
+
         setLives({
             ...lives,
             [player]: lives[player] - 1
         })
     }
 
-    // const { sendJsonMessage, readyState } = useWebSocket(WS_URL, {
-    //     onOpen: () => {
-    //       console.log('WebSocket connection established.');
-    //     },
-    //     share: true,
-    //     filter: () => false,
-    //     retryOnError: true,
-    //     shouldReconnect: () => true
-    //   });
-
     return (
         <>
         <Nav />
+        {/* Some listeners for the server */}
+        <EndTurnListener
+            takeHeart={takeHeart}
+            useShield={useShield}
+            useSword= {useSword}
+        />
+        <NewQuestionListener 
+            setQuestion={props.setSingle}
+            setDisabled={props.setInputDisabled}
+        />
         <section>
             <Grid container>
                 <Grid item xs={4} className="playerColumns">
@@ -95,12 +115,13 @@ const GameScreen = (props: GameScreenProps) => {
                         <QuestionCard 
                             q={props.q}
                             a={props.a}
-                            disabled={inputDisabled}
+                            disabled={props.inputDisabled}
                         />
                         <UserInput 
-                            disabled={inputDisabled}
-                            setDisabled={setInputDisabled}
+                            disabled={props.inputDisabled}
+                            setDisabled={props.setInputDisabled}
                             usedPowerUps={powerUps}
+                            sendMessage={props.sendMessage}
                         />
                     </div>
                 </Grid>

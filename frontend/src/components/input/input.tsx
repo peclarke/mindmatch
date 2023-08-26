@@ -6,6 +6,10 @@ import './input.css';
 // import 'shield.png';
 
 import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
+import { SendJsonMessage } from 'react-use-websocket/dist/lib/types';
+import useWebSocket from 'react-use-websocket';
+import { WS_URL } from '../../globals';
+import { NewQuestionConfirm } from '../results';
 
 export type InputButtonProps = {
     type: "text" | "button" | "enter"
@@ -26,6 +30,17 @@ const InputButton = (props: InputButtonProps) => {
         }
     }
 
+    const { lastJsonMessage } = useWebSocket(WS_URL, {
+        share: true,
+        filter: NewQuestionConfirm
+    })
+
+    useEffect(() => {
+        if (lastJsonMessage) {
+            setAnswer("");
+        }
+    }, [lastJsonMessage])
+
     return (
         <div>
             {
@@ -40,7 +55,6 @@ const InputButton = (props: InputButtonProps) => {
                         onClick={() => props.submitAns ? props.submitAns(answer) : null} 
                         className="enterBtn" 
                         variant="contained"
-                        // sx={{width: "50%"}}
                     >
                         <KeyboardReturnIcon sx={{height: 128}}/>
                     </Button>
@@ -55,11 +69,12 @@ export type UserInputProps = {
     disabled: boolean;
     setDisabled: (val: boolean) => void;
     usedPowerUps: {};
+    sendMessage: SendJsonMessage;
+    
 }
 
 const UserInput = (props: UserInputProps) => {
     const [powerUp, setPowerUp] = useState<"sword" | "shield" | "">("");
-    // const [disableInput, setDisableInput] = useState(false);
 
     const changePowerUp = (value: "sword" | "shield" | "") => {
         if (powerUp === "") {setPowerUp(value); return }
@@ -75,8 +90,19 @@ const UserInput = (props: UserInputProps) => {
     const submitAnswer = (answer: string) => {
         // disable input
         props.setDisabled(true);
+
+        // update information on player card
         
         // update server
+        
+        // hang on, who the fuck are we?
+        // const player = localStorage.getItem('player') === "one" ? 1 : 2;
+        // if (player === 1) {
+        props.sendMessage({
+            type: localStorage.getItem('player') === "one" ? "playeroneturn" : "playertwoturn",
+            content: answer
+        })
+
         console.log(answer);
     }
 

@@ -11,6 +11,7 @@ import { LoadingScreen, NewGameScreen } from './screens/newGame.tsx';
 import ErrorElement from './components/error.tsx';
 import GameScreen from './screens/game.tsx';
 import FullGameLogic from './screens/fullGameLogic.tsx';
+import FinalScreen from './screens/final/final.tsx';
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <FullGameLogic />
+      },
+      {
+        path: '/dev',
+        element: <FinalScreen winner="Bill Jeff" loser="Alice Affrey"/>
       }
     ]
   } 

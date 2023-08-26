@@ -5,6 +5,7 @@ import useWebSocket from "react-use-websocket";
 import { WS_URL } from "../../globals";
 import { useEffect, useState } from "react";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { EndTurnConfirm } from "../results";
 
 export type PlayerCardProps = {
     number: 1 | 2;
@@ -30,12 +31,16 @@ const PlayerCardWithPowers = (props: PlayerCardProps) => {
 
     useEffect(() => {
         if (lastJsonMessage) {
-
+            const player = localStorage.getItem('player') === "one" ? 1 : 2;
+            if (lastJsonMessage?.content === props.number) {
+                setMessageSent(true);
+            };
         }
     }, [lastJsonMessage])
 
     return (
         <>
+        <EndTurn setMessageSent={setMessageSent}/>
         <Paper elevation={3} className={props.number === 1 ? "playerCard left" : "playerCard right"} sx={{backgroundColor: "rgb(255,255,255,0.8)"}}>
             <div className="info">
                 <img src={"./repogotchi"+props.number+".png"} className="avatar"/>
@@ -45,7 +50,7 @@ const PlayerCardWithPowers = (props: PlayerCardProps) => {
                     </Typography>
                 </span>
                 <div className="third">
-                    {!messageSent ? <CircularProgress size={30} className="circularProgress"/> : <CheckCircleIcon />}
+                    {!messageSent ? <CircularProgress size={30} className="circularProgress"/> : <CheckCircleIcon fontSize={"large"} />}
                 </div>
             </div>
             <div className={props.number === 1 ? "newPlayerCard newLeft" : "newPlayerCard newRight"}>
@@ -71,26 +76,47 @@ const PlayerCardWithPowers = (props: PlayerCardProps) => {
     )
 }
 
-const PlayerCard = (props: PlayerCardProps) => {
+type EndTurnProps = {
+    setMessageSent: (val: boolean) => void;
+}
+
+const EndTurn = (props: EndTurnProps) => {
+    const { lastJsonMessage } = useWebSocket(WS_URL, {
+        share: true,
+        filter: EndTurnConfirm
+    })
+
+    useEffect(() => {
+        if (lastJsonMessage) {
+            props.setMessageSent(false);
+        }
+    }, [lastJsonMessage])
+
     return (
-        <div>
-            <Paper elevation={1} className={props.number === 1 ? "playerCard left" : "playerCard right"}>
-                {/* <div> */}
-                <img src={"./repogotchi"+props.number+".png"} className="avatar"/>
-                <div className="health">
-                    <img src="./heart.png" className="heart"/>
-                    <img src="./heart.png" className="heart"/>
-                    <img src="./heart.png" className="heart"/>
-                </div>
-                
-                {/* </div> */}
-                {/* <div>
-                    <img src="./sword.png" />
-                </div> */}
-            </Paper>
-        </div>
+        <></>
     )
 }
+
+// const PlayerCard = (props: PlayerCardProps) => {
+//     return (
+//         <div>
+//             <Paper elevation={1} className={props.number === 1 ? "playerCard left" : "playerCard right"}>
+//                 {/* <div> */}
+//                 <img src={"./repogotchi"+props.number+".png"} className="avatar"/>
+//                 <div className="health">
+//                     <img src="./heart.png" className="heart"/>
+//                     <img src="./heart.png" className="heart"/>
+//                     <img src="./heart.png" className="heart"/>
+//                 </div>
+                
+//                 {/* </div> */}
+//                 {/* <div>
+//                     <img src="./sword.png" />
+//                 </div> */}
+//             </Paper>
+//         </div>
+//     )
+// }
 
 
 export default PlayerCardWithPowers;

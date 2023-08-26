@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import Nav from "../components/nav";
 import useWebSocket from "react-use-websocket";
 import { WS_URL } from "../globals";
+import { EndGame } from "./full2GameLogic";
 
 export type GameScreenProps = {
     q: string;
@@ -28,6 +29,20 @@ const GameScreen = (props: GameScreenProps) => {
         1: [] as string[],
         2: [] as string[]
     })
+
+    const { lastJsonMessage } = useWebSocket(WS_URL, {
+        share: true,
+        filter: EndGame
+    })
+
+    useEffect(() => {
+        console.log('first end game')
+        console.log(lastJsonMessage)
+        if (lastJsonMessage) {
+            console.log("end game")
+            window.location.reload();
+        }
+    }, [lastJsonMessage]);
 
     const useSword = (player: number) => {
         setPowerUps({
@@ -50,15 +65,15 @@ const GameScreen = (props: GameScreenProps) => {
         })
     }
 
-    const { sendJsonMessage, readyState } = useWebSocket(WS_URL, {
-        onOpen: () => {
-          console.log('WebSocket connection established.');
-        },
-        share: true,
-        filter: () => false,
-        retryOnError: true,
-        shouldReconnect: () => true
-      });
+    // const { sendJsonMessage, readyState } = useWebSocket(WS_URL, {
+    //     onOpen: () => {
+    //       console.log('WebSocket connection established.');
+    //     },
+    //     share: true,
+    //     filter: () => false,
+    //     retryOnError: true,
+    //     shouldReconnect: () => true
+    //   });
 
     return (
         <>

@@ -28,9 +28,14 @@ export type SomeGameLogicProps = {
     joining: boolean;
 }
 
-const ConfirmFullStart = (e: MessageEvent<any>): boolean => {
+export const ConfirmFullStart = (e: MessageEvent<any>): boolean => {
     const evt = JSON.parse(e.data);
     return evt.type === "startgame";
+}
+
+export const EndGame = (e: MessageEvent<any>): boolean => {
+    const evt = JSON.parse(e.data);
+    return evt.type === "endgame";
 }
 
 const Full2GameLogic = (props: SomeGameLogicProps) => {
@@ -65,7 +70,7 @@ const Full2GameLogic = (props: SomeGameLogicProps) => {
         });
         // change screens
         if (singleQ.loaded) setGameStarted(true);
-        
+
     }, [lastJsonMessage]);
 
     return (

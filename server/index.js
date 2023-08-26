@@ -80,18 +80,25 @@ function broadcastMessage(json) {
 
 function handleDisconnect(userId) {
     console.log(`${userId} disconnected.`);
+    gameEnd()
 
-    if (game !== null) {
-        if (game["players"].includes(userId)) {
-            // end the game here
-            gameEnd()
-        }
-    }
+    // if (game !== null && Object.keys(game).length > 0) {
+    //     if (game["players"].includes(userId)) {
+    //         // end the game here
+    //         gameEnd()
+    //     }
+    // }
 
     delete clients[userId];
 }
 
-function gameEnd() { broadcastMessage(endGame); game = {}; }
+function gameEnd() { 
+    broadcastMessage({
+        type: "endgame",
+        content: ""
+    });
+    game = {}; 
+}
 
 function joinGame(userId) {
     game["players"].push(userId);

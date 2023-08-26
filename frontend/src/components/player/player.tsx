@@ -99,7 +99,7 @@ const EndTurn = (props: EndTurnProps) => {
             // then go to reset stuff
             // props.setMessageSent(false);
 
-            setTimeout(resetQuestion, 2000);
+            setTimeout(resetQuestion, 3000);
         }
     }, [lastJsonMessage])
 

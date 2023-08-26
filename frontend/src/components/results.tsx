@@ -50,9 +50,7 @@ export const EndTurnListener = (props: EndTurnListenerProps) => {
     }
 
     useEffect(() => {
-        // console.log(lastJsonMessage)
         if (lastJsonMessage) {
-            // console.log(lastJsonMessage?.content)
             setFinalAnswer(lastJsonMessage?.content);
             updateState(lastJsonMessage?.content);
         }
@@ -84,40 +82,6 @@ export const NewQuestionListener = (props: NewQuestionListenerProps) => {
         // setIcons(<></>)
     }
 
-    // const moveLeftImage = () => {
-    //     anime({
-    //         targets: ".biganis>img:first-child",
-    //         translateX: {
-    //             value: "60vw",
-    //             duration: 1000
-    //         },
-    //         opacity: {
-    //             value: '0',
-    //             delay: 800,
-    //             duration: 3000
-    //         }
-    //     })
-    // }
-
-    // const moveRightImage = () => {
-    //     anime({
-    //         targets: ".biganis2>img:first-child",
-    //         translateX: {
-    //             value: "-60vw",
-    //             duration: 1000,
-    //             direction: "alternate"
-    //         },
-    //         opacity: {
-    //             value: '0',
-    //             delay: 800,
-    //             duration: 3000,
-    //             changeComplete: (right: anime.AnimeInstance) => console.log("finished")
-    //         }
-    //     })
-    // }
-
-    // useEffect(() => moveRightImage(), [])
-
     const animatedIcons = <>
         <div className="biganis">
             <img src="./sword.png"/>
@@ -130,12 +94,13 @@ export const NewQuestionListener = (props: NewQuestionListenerProps) => {
 
     const [icons, setIcons] = useState(animatedIcons);
 
+    const [hoop, setHoop] = useState(false);
+
     useEffect(() => {
         if (lastJsonMessage) {
-            // moveRightImage();
-            // moveLeftImage();
-            // setTimeout(moveRightImage, 3000);
             setIcons(animatedIcons);
+
+            setHoop(true);
 
             const r: anime.AnimeInstance = anime({
                 targets: ".biganis2>img:first-child",
@@ -167,12 +132,19 @@ export const NewQuestionListener = (props: NewQuestionListenerProps) => {
             })
 
             setTimeout(delayedResponse, 2000);
+            setTimeout(() => setHoop(false), 2000);
         }   
     }, [lastJsonMessage])
 
     return (
         <>
-        {icons}
+            <div className={!hoop ? "biganis" : "biganis blackBack"}>
+                <img src="./sword.png"/>
+            </div>
+            <></>
+            <div className={!hoop ? "biganis2" : "biganis2 blackBack"}>
+                <img src="./sword-flip.png"/>
+            </div>
         </>
     )
 }

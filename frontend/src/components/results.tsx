@@ -80,58 +80,99 @@ export const NewQuestionListener = (props: NewQuestionListenerProps) => {
         });
 
         props.setDisabled(false);
+
+        // setIcons(<></>)
     }
 
-    const moveLeftImage = () => {
-        anime({
-            targets: ".biganis>img:first-child",
-            translateX: {
-                value: "55vw",
-                duration: 1000
-            },
-            opacity: {
-                value: '0',
-                delay: 800,
-                duration: 3000
-            }
-        })
-    }
+    // const moveLeftImage = () => {
+    //     anime({
+    //         targets: ".biganis>img:first-child",
+    //         translateX: {
+    //             value: "60vw",
+    //             duration: 1000
+    //         },
+    //         opacity: {
+    //             value: '0',
+    //             delay: 800,
+    //             duration: 3000
+    //         }
+    //     })
+    // }
 
-    const moveRightImage = () => {
-        anime({
-            targets: ".biganis2>img:first-child",
-            scaleX: -1,
-            translateX: {
-                value: "-55vw",
-                duration: 1000
-            },
-            opacity: {
-                value: '0',
-                delay: 800,
-                duration: 3000
-            }
-        })
-    }
+    // const moveRightImage = () => {
+    //     anime({
+    //         targets: ".biganis2>img:first-child",
+    //         translateX: {
+    //             value: "-60vw",
+    //             duration: 1000,
+    //             direction: "alternate"
+    //         },
+    //         opacity: {
+    //             value: '0',
+    //             delay: 800,
+    //             duration: 3000,
+    //             changeComplete: (right: anime.AnimeInstance) => console.log("finished")
+    //         }
+    //     })
+    // }
 
-    useEffect(() => moveRightImage(), [])
+    // useEffect(() => moveRightImage(), [])
+
+    const animatedIcons = <>
+        <div className="biganis">
+            <img src="./sword.png"/>
+        </div>
+        <></>
+        <div className="biganis2">
+            <img src="./sword-flip.png"/>
+        </div>
+    </>
+
+    const [icons, setIcons] = useState(animatedIcons);
 
     useEffect(() => {
         if (lastJsonMessage) {
-            moveRightImage();
-            moveLeftImage();
+            // moveRightImage();
+            // moveLeftImage();
+            // setTimeout(moveRightImage, 3000);
+            setIcons(animatedIcons);
+
+            const r: anime.AnimeInstance = anime({
+                targets: ".biganis2>img:first-child",
+                translateX: {
+                    value: "-60vw",
+                    duration: 1000
+                },
+                opacity: {
+                    value: '0',
+                    delay: 800,
+                    duration: 3000,
+                    direction: "alternate"
+                },
+                changeComplete: (r: anime.AnimeInstance) => r.restart()
+            })
+
+            const l: anime.AnimeInstance = anime({
+                targets: ".biganis>img:first-child",
+                translateX: {
+                    value: "60vw",
+                    duration: 1000
+                },
+                opacity: {
+                    value: '0',
+                    delay: 800,
+                    duration: 3000
+                },
+                changeComplete: (l: anime.AnimeInstance) => l.restart()
+            })
+
             setTimeout(delayedResponse, 2000);
         }   
     }, [lastJsonMessage])
 
     return (
         <>
-        {/* <div className="biganis">
-            <img src="./sword.png"/>
-        </div> */}
-
-        <div className="biganis2">
-            <img src="./sword.png"/>
-        </div>
+        {icons}
         </>
     )
 }

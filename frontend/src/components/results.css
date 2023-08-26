@@ -28,7 +28,7 @@ body {
     /* margin-left: -25%; */
     height: 40vh;
     position: absolute;
-    background-color: red;
+    /* background-color: red; */
     /* margin-left: auto;
     right: 0; */
     margin-right: -25%;
@@ -41,14 +41,14 @@ body {
 
 .biganis>:first-child {
     margin-left: -25%;
-    background-color: blue;
+    /* background-color: blue; */
 }
 
 .biganis>:last-child {
     margin-right: -45vw;
     padding: 0;
     margin-left: 0;
-    background-color: red;
+    /* background-color: red; */
     /* margin-left: 50vw; */
 }
 

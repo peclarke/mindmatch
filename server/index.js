@@ -178,8 +178,8 @@ function statUpdate(oneCorrect, twoCorrect) {
 }
 
 function checkAnswer(sysAnswer, answerOne, answerTwo) {
-    const oneCorrect = sysAnswer === answerOne;
-    const twoCorrect = sysAnswer === answerTwo;
+    const oneCorrect = sysAnswer.toLowerCase() === answerOne.toLowerCase();
+    const twoCorrect = sysAnswer.toLowerCase() === answerTwo.toLowerCase();
 
     statUpdate(oneCorrect, twoCorrect);
 

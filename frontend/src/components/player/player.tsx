@@ -17,6 +17,7 @@ export type PlayerCardProps = {
     sword: boolean;
     shield: boolean;
     correct: boolean;
+    left: boolean;
     // answerSent: boolean;
 }
 
@@ -54,7 +55,7 @@ const PlayerCardWithPowers = (props: PlayerCardProps) => {
         {props.correct && <div className="rightAnswer">
             <CheckBoxIcon fontSize={"large"}/>
         </div>}
-        <Paper elevation={3} className={props.number === 1 ? "playerCard left" : "playerCard right"} sx={{backgroundColor: "rgb(255,255,255,0.8)"}}>
+        <Paper elevation={3} className={props.left ? "playerCard left" : "playerCard right"} sx={{backgroundColor: "rgb(255,255,255,0.8)"}}>
             <div className="info">
                 <img src={"./repogotchi"+props.number+".png"} className="avatar"/>
                 <span>
@@ -69,7 +70,7 @@ const PlayerCardWithPowers = (props: PlayerCardProps) => {
                     } 
                 </div>
             </div>
-            <div className={props.number === 1 ? "newPlayerCard newLeft" : "newPlayerCard newRight"}>
+            <div className={props.left ? "newPlayerCard newLeft" : "newPlayerCard newRight"}>
                 <div className="row1">
                     {
                         [...Array(props.lives < 0 ? 0 : props.lives).keys()].map(_ => {return (

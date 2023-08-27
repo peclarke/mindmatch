@@ -92,6 +92,46 @@ const GameScreen = (props: GameScreenProps) => {
 
     const [p1Correct, setP1Correct] = useState(false);
     const [p2Correct, setP2Correct] = useState(false);
+
+    const currentPlayer = localStorage.getItem("player");
+
+
+    const PlayerOne = (props: {left: boolean}) => {
+        return (
+        <PlayerCard 
+            number={1} 
+            name={names[0]}
+            lives={lives[1]}
+            sword={!powerUps[1].includes("sword")}
+            shield={!powerUps[1].includes("shield")}
+            correct={p1Correct}
+            left={props.left}
+        />
+        )
+    }
+
+    const PlayerTwo = (props: {left: boolean}) => {
+        return (
+            <PlayerCard 
+                number={2} 
+                name={names[1]} 
+                lives={lives[2]}
+                sword={!powerUps[2].includes("sword")}
+                shield={!powerUps[2].includes("shield")}
+                correct={p2Correct}
+                left={props.left}
+            />
+        )
+    }
+
+    // const PlayerTwo = <PlayerCard 
+    //     number={2} 
+    //     name={names[1]} 
+    //     lives={lives[2]}
+    //     sword={!powerUps[2].includes("sword")}
+    //     shield={!powerUps[2].includes("shield")}
+    //     correct={p2Correct}
+    // />
     
     return (
         <>
@@ -117,15 +157,13 @@ const GameScreen = (props: GameScreenProps) => {
         <section>
             <Grid container>
                 <Grid item xs={4} className="playerColumns">
-                    {/* maybe some scores for player 1? animation comes form this side */}
-                    <PlayerCard 
-                        number={1} 
-                        name={names[0]}
-                        lives={lives[1]}
-                        sword={!powerUps[1].includes("sword")}
-                        shield={!powerUps[1].includes("shield")}
-                        correct={p1Correct}
-                    />
+                    {/* 
+
+                        This will always be the current player's column.
+                        The third column is reserved for the opponent
+
+                    */}
+                    { currentPlayer === "one" ? <PlayerOne left={true}/> : <PlayerTwo left={true} /> }
                 </Grid>
                 <Grid item xs={4}>
                     <div className="middleColumn">
@@ -143,14 +181,7 @@ const GameScreen = (props: GameScreenProps) => {
                     </div>
                 </Grid>
                 <Grid item xs={4} className="playerColumns">
-                    <PlayerCard 
-                        number={2} 
-                        name={names[1]} 
-                        lives={lives[2]}
-                        sword={!powerUps[2].includes("sword")}
-                        shield={!powerUps[2].includes("shield")}
-                        correct={p2Correct}
-                    />
+                    { currentPlayer === "one" ? <PlayerTwo left={false}/> : <PlayerOne left={false} /> }
                 </Grid>
             </Grid>
         </section>

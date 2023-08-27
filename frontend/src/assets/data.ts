@@ -187,28 +187,34 @@ export type DeckType = {
         q: string;
         a: string;
     }[];
+    color: string;
 }
 
 export const datasets: DeckType[] = [
   {
     name: "UQ General Knowledge",
-    data: uq_data_set
+    data: uq_data_set,
+    color: "lightblue",
   },
   {
     name: "Music General Knowledge",
-    data: music_data_set
+    data: music_data_set,
+    color: "yellow"
   },
   {
     name: "Basic Anatomy",
-    data: medicine_data_set
+    data: medicine_data_set,
+    color: "violet"
   },
   {
     name: "Pop Quiz",
-    data: general_data_set
+    data: general_data_set,
+    color: "green"
   }
 ]
 
 export const importedDeck = {
     name: "Geography Flash Cards",
-    data: geography_data_set
+    data: geography_data_set,
+    color: "orange"
 }

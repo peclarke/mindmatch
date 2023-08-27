@@ -83,10 +83,13 @@ const DeckCard = (props: DeckType) => {
                 <Card className="deckCard">
                     <span>{props.name}</span>
                     <span>{numberOfCards} questions</span>
-                    <Button variant="contained">PLAY</Button>
+                    <Button variant="contained" sx={{
+                        backgroundColor: props.color,
+                        color: props.color === "yellow" ? "black" : "white"
+                    }}>PLAY</Button>
                 </Card>
-                <Card className="deckCard"></Card>
-                <Card className="deckCard"></Card>
+                <Card className="deckCard" sx={{backgroundColor: props.color}}></Card>
+                <Card className="deckCard" sx={{backgroundColor: props.color}}></Card>
             </div>
     </Grid>
     )

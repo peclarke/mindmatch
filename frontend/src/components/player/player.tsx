@@ -3,9 +3,12 @@ import { CircularProgress, Grid, Paper, Tooltip, Typography } from "@mui/materia
 import './player.css';
 import useWebSocket from "react-use-websocket";
 import { WS_URL } from "../../globals";
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { EndTurnConfirm } from "../results";
+import { EndTurnConfirm, NewQuestionListener } from "../results";
+import anime from 'animejs/lib/anime.es.js';
+
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
 export type PlayerCardProps = {
     number: 1 | 2;
@@ -13,12 +16,17 @@ export type PlayerCardProps = {
     lives: number;
     sword: boolean;
     shield: boolean;
+    correct: boolean;
     // answerSent: boolean;
 }
 
 const ConfirmPlayerTurn = (message: MessageEvent<any>): boolean => {
     const evt = JSON.parse(message.data);
     return evt.type === "confirmturn";
+}
+
+type AnswerListenProps = {
+    change: (stuff: any) => void
 }
 
 const PlayerCardWithPowers = (props: PlayerCardProps) => {
@@ -41,7 +49,11 @@ const PlayerCardWithPowers = (props: PlayerCardProps) => {
 
     return (
         <>
+        {/* <AnswerListen /> */}
         <EndTurn setMessageSent={setMessageSent}/>
+        {props.correct && <div className="rightAnswer">
+            <CheckBoxIcon fontSize={"large"}/>
+        </div>}
         <Paper elevation={3} className={props.number === 1 ? "playerCard left" : "playerCard right"} sx={{backgroundColor: "rgb(255,255,255,0.8)"}}>
             <div className="info">
                 <img src={"./repogotchi"+props.number+".png"} className="avatar"/>
@@ -60,7 +72,7 @@ const PlayerCardWithPowers = (props: PlayerCardProps) => {
             <div className={props.number === 1 ? "newPlayerCard newLeft" : "newPlayerCard newRight"}>
                 <div className="row1">
                     {
-                        [...Array(props.lives).keys()].map(_ => {return (
+                        [...Array(props.lives < 0 ? 0 : props.lives).keys()].map(_ => {return (
                             <img src="./heart.png" />
                         )})
                     }

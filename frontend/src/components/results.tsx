@@ -17,6 +17,7 @@ export const NewQuestionConfirm = (message: MessageEvent<any>): boolean => {
 export type FinalAnswer = Record<string, boolean>;
 
 export type NewQuestionListenerProps = {
+    lives: Record<number, number>;
     setQuestion: React.Dispatch<React.SetStateAction<{
         q: string;
         a: string;
@@ -62,6 +63,13 @@ export const EndTurnListener = (props: EndTurnListenerProps) => {
 }
 
 export const NewQuestionListener = (props: NewQuestionListenerProps) => {
+    const { sendJsonMessage, readyState } = useWebSocket(WS_URL, {
+        share: true,
+        filter: () => false,
+        retryOnError: true,
+        shouldReconnect: () => true
+      });
+
     const { lastJsonMessage } = useWebSocket(WS_URL, {
         share: true,
         filter: NewQuestionConfirm
@@ -98,6 +106,22 @@ export const NewQuestionListener = (props: NewQuestionListenerProps) => {
 
     useEffect(() => {
         if (lastJsonMessage) {
+            // check lives
+            console.log(props.lives);
+            // if (props.lives[0] <= 1) {
+            //     sendJsonMessage({
+            //         type: "playerdead",
+            //         content: 1
+            //     })
+            //     return;
+            // } else if (props.lives[1] <= 1) {
+            //     sendJsonMessage({
+            //         type: "playerdead",
+            //         content: 2
+            //     })
+            //     return;
+            // }
+
             setIcons(animatedIcons);
 
             setHoop(true);

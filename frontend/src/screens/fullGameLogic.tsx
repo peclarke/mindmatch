@@ -14,6 +14,8 @@ const FullGameLogic = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [joining, setJoining] = useState<boolean>(false);
 
+    const [qa, setQa] = useState<{q: string; a: string;}[]>();
+
     return (
         <>
         <NameContext.Provider value={stateValue}>
@@ -26,9 +28,11 @@ const FullGameLogic = () => {
                 ? <LandingScreen 
                     startLoading={() => setLoading(true)}
                     startJoining={() => setJoining(true)}
+                    setQa={(val: any) => setQa(val)}
                   />
                 : <Full2GameLogic
                     joining={joining}
+                    cardDeck={qa ? qa : [{q: "", a: ""}]}
                 />
             }
         </NameContext.Provider>

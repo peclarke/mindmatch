@@ -8,6 +8,7 @@ import AddIcon from '@mui/icons-material/Add';
 export type LandingScreenProps = {
     startLoading: () => void;
     startJoining: () => void;
+    setQa:        ({}: any) => void;
 }
 
 const LandingScreen = (props: LandingScreenProps) => {
@@ -19,9 +20,14 @@ const LandingScreen = (props: LandingScreenProps) => {
         inputFile.current.click();
     }
 
+    const startNewGame = (cardDeck: {q: string; a: string}[]) => {
+        props.setQa(cardDeck);
+        props.startLoading();
+    }
+
     return (
         <section>
-            <Nav />
+            <Nav startJoining={props.startJoining}/>
             <Grid container>
                 <Grid item xs={3} className="menu">
                     <h2>Mind Match</h2>
@@ -30,7 +36,7 @@ const LandingScreen = (props: LandingScreenProps) => {
                 </Grid>
                 <Grid item container xs={9} columnSpacing={6} rowSpacing={5} className="decks">
                     {
-                        decks.map(deck => <DeckCard {...deck} />)
+                        decks.map(deck => <DeckCard deck={deck} startGame={startNewGame}/>)
                     }
                     <AddDeck 
                         inputFile={inputFile} 
@@ -74,22 +80,28 @@ const AddDeck = (props: AddDeckProps) => {
     )
 }
 
-const DeckCard = (props: DeckType) => {
-    const numberOfCards = props.data.length;
+type DeckCardProps = {
+    deck: DeckType;
+    startGame: (_: {q: string, a: string}[]) => void;
+}
+
+const DeckCard = (props: DeckCardProps) => {
+    const numberOfCards = props.deck.data.length;
 
     return (
     <Grid item xs={4}>
             <div className="deckSet">
                 <Card className="deckCard">
-                    <span>{props.name}</span>
+                    <span>{props.deck.name}</span>
                     <span>{numberOfCards} questions</span>
-                    <Button variant="contained" sx={{
-                        backgroundColor: props.color,
-                        color: props.color === "yellow" ? "black" : "white"
+                    <Button variant="contained" onClick={() => props.startGame(props.deck.data)}
+                    sx={{
+                        backgroundColor: props.deck.color,
+                        color: props.deck.color === "yellow" ? "black" : "white"
                     }}>PLAY</Button>
                 </Card>
-                <Card className="deckCard" sx={{backgroundColor: props.color}}></Card>
-                <Card className="deckCard" sx={{backgroundColor: props.color}}></Card>
+                <Card className="deckCard" sx={{backgroundColor: props.deck.color}}></Card>
+                <Card className="deckCard" sx={{backgroundColor: props.deck.color}}></Card>
             </div>
     </Grid>
     )

@@ -76,6 +76,9 @@ export type UserInputProps = {
 const UserInput = (props: UserInputProps) => {
     const [powerUp, setPowerUp] = useState<"sword" | "shield" | "">("");
 
+    const [swordBtn,  setSwordBtn]  = useState(false);
+    const [shieldBtn, setShieldBtn] = useState(false);
+
     const changePowerUp = (value: "sword" | "shield" | "") => {
         if (powerUp === "") {setPowerUp(value); return }
 
@@ -103,6 +106,9 @@ const UserInput = (props: UserInputProps) => {
             content: answer
         })
 
+        setSwordBtn(false);
+        setShieldBtn(false);
+
         console.log(answer);
     }
 
@@ -117,12 +123,12 @@ const UserInput = (props: UserInputProps) => {
                 <Grid item xs={12}>
                     <div className={!props.disabled ? "action-buttons input-enabled" : "action-buttons input-disabled"}>
                         <Tooltip title="Double your attack">
-                            <Button disabled={props.disabled} className="actionBtn" variant="contained" onChange={() => changePowerUp("sword")}>
+                            <Button disabled={swordBtn || props.disabled} className="actionBtn" variant="contained" onClick={() => setSwordBtn(true)} onChange={() => {changePowerUp("sword"); setSwordBtn(true)}}>
                                 <img src="./sword.png" alt="double attack button" className={props.disabled ? "img-disabled" : "" }/>
                             </Button>
                         </Tooltip>
                         <Tooltip title="Defend against opponent">
-                            <Button disabled={props.disabled} className="actionBtn" variant="contained" onChange={() => changePowerUp("shield")}>
+                            <Button disabled={shieldBtn || props.disabled} onClick={() => setShieldBtn(true)} className="actionBtn" variant="contained" onChange={() => changePowerUp("shield")}>
                                 <img src="./shield.png" alt="defend button" className={props.disabled ? "img-disabled" : "" }/>
                             </Button>
                         </Tooltip>

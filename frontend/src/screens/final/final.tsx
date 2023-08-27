@@ -51,6 +51,8 @@ const FinalScreen = (props: FinalScreenProps) => {
         });
     }, [])
 
+    console.log(props.winner);
+
     console.log(props.winner.number);
 
     return (

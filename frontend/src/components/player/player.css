@@ -165,3 +165,17 @@
 .newPlayerCard>.row1>img, .newPlayerCard>.row2>img {
     width: 25%;
 }
+
+.rightAnswer {
+    position: absolute;
+    transition: 500ms;
+    /* font-size: 50em; */
+    color: green;
+    /* width: 100%; */
+}
+
+.rightAnswer>:first-child {
+    font-size: 300px;
+    background-color: rgb(255, 255, 255, 0.8);
+    border-radius: 10%;
+}

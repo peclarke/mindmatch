@@ -3,7 +3,7 @@ import { LoadingScreen, NewGameScreen } from "./newGame";
 import GameScreen from "./game";
 import useWebSocket from "react-use-websocket";
 import { WS_URL } from "../globals";
-import { uq_data_set } from "../assets/data";
+import { DeckType, uq_data_set } from "../assets/data";
 import { NameContext } from "../main";
 import FinalScreen, { StatType } from "./final/final";
 
@@ -29,6 +29,10 @@ const game = [
 
 export type SomeGameLogicProps = {
     joining: boolean;
+    cardDeck: {
+        q: string;
+        a: string;
+    }[]
 }
 
 export const ConfirmFullStart = (e: MessageEvent<any>): boolean => {
@@ -44,7 +48,7 @@ export const EndGame = (e: MessageEvent<any>): boolean => {
 const Full2GameLogic = (props: SomeGameLogicProps) => {
 
     // const [qa, setQa] = useState(uq_data_set);
-    const [qa, setQa] = useState(game);
+    const [qa, setQa] = useState(props.cardDeck);
     const [gameStarted, setGameStarted] = useState<boolean>(false);
     const [inputDisabled, setInputDisabled] = useState<boolean>(false);
 

@@ -12,7 +12,7 @@ import useWebSocket from "react-use-websocket";
 import { WS_URL } from "../globals";
 import { EndGame, FinishListener } from "./full2GameLogic";
 import { SendJsonMessage } from "react-use-websocket/dist/lib/types";
-import { EndTurnListener, NewQuestionListener } from "../components/results";
+import { EndTurnConfirm, EndTurnListener, NewQuestionListener } from "../components/results";
 import { GameStartListener, p1Name, p2Name } from "./newGame";
 import { NameContext } from "../main";
 
@@ -89,11 +89,18 @@ const GameScreen = (props: GameScreenProps) => {
     }
 
     const { names } = useContext(NameContext);
+
+    const [p1Correct, setP1Correct] = useState(false);
+    const [p2Correct, setP2Correct] = useState(false);
     
     return (
         <>
         <Nav />
 
+        <AnswerListen 
+            setP1Correct={setP1Correct}
+            setP2Correct={setP2Correct}
+        />
         {/* Some listeners for the server */}
         <FinishListener setFinalScreen={props.setFinalScreen}/>
         {/* <GameStartListener /> */}
@@ -103,6 +110,7 @@ const GameScreen = (props: GameScreenProps) => {
             useSword= {useSword}
         />
         <NewQuestionListener 
+            lives={lives}
             setQuestion={props.setSingle}
             setDisabled={props.setInputDisabled}
         />
@@ -116,6 +124,7 @@ const GameScreen = (props: GameScreenProps) => {
                         lives={lives[1]}
                         sword={!powerUps[1].includes("sword")}
                         shield={!powerUps[1].includes("shield")}
+                        correct={p1Correct}
                     />
                 </Grid>
                 <Grid item xs={4}>
@@ -140,12 +149,38 @@ const GameScreen = (props: GameScreenProps) => {
                         lives={lives[2]}
                         sword={!powerUps[2].includes("sword")}
                         shield={!powerUps[2].includes("shield")}
+                        correct={p2Correct}
                     />
                 </Grid>
             </Grid>
         </section>
         </>
     )
+}
+
+type AnswerListenProps = {
+    setP1Correct: (val: boolean) => void;
+    setP2Correct: (val: boolean) => void;
+}
+
+const AnswerListen = (props: AnswerListenProps) => {
+    const { lastJsonMessage } = useWebSocket(WS_URL, {
+        share: true,
+        filter: EndTurnConfirm
+    })
+    
+    useEffect(() => {
+        if (lastJsonMessage) {
+            if (lastJsonMessage.content[1]) props.setP1Correct(true);
+            if (lastJsonMessage.content[2]) props.setP2Correct(true);
+            setTimeout(() => {
+                props.setP1Correct(false);
+                props.setP2Correct(false);
+            }, 2000)
+        }
+    }, [lastJsonMessage]);
+
+    return (<></>)
 }
 
 export default GameScreen;

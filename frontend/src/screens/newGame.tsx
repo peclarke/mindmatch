@@ -6,6 +6,7 @@ import './newGame.css';
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { NameContext } from "../main";
+import Nav from "../components/nav";
 
 const game = [
     {
@@ -110,9 +111,12 @@ export const LoadingScreen = (props: LoadingScreenProps) => {
     return (
         <>
             <GameStartListener />
+            <Nav startJoining={function (): void {
+                throw new Error("Function not implemented.");
+            } } />
             <div className="loading">
                 <h2>Waiting for Player</h2>
-                <span>Copy the link below and send it to a friend</span>
+                <span>Copy the link below and send it to a friend to get started.</span>
                 <input value={window.location.href} />
             </div>
         </>

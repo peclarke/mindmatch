@@ -43,6 +43,7 @@ const typesDef = {
     
 
     // player dead stuff
+    PLAYER_DEAD: "playerdead"
 }
 
 function confirmTurn(player) {
@@ -83,12 +84,20 @@ function didTie() {
     return correct === against;
 }
 
-function finishGame() {
-    const winnerArea = didPlayerOneWin() ? game["stats"]["p1"] : game["stats"]["p2"];
-    const loserArea  = didPlayerOneWin() ? game["stats"]["p2"] : game["stats"]["p1"];
+function finishGame(deadPlayer=false) {
+    const decider = didPlayerOneWin;
 
-    const winNumber = didPlayerOneWin() ? 1 : 2;
-    const loseNumber = didPlayerOneWin() ? 2 : 1;
+    if (deadPlayer !== false) {
+        if (deadPlayer === 1) {
+            decider = () => false;
+        }
+    }
+
+    const winnerArea = decider() ? game["stats"]["p1"] : game["stats"]["p2"];
+    const loserArea  = decider() ? game["stats"]["p2"] : game["stats"]["p1"];
+
+    const winNumber = decider() ? 1 : 2;
+    const loseNumber = decider() ? 2 : 1;
 
 
     broadcastMessage({
@@ -152,11 +161,15 @@ function statUpdate(oneCorrect, twoCorrect) {
         "stats": {
             "p1": {
                 ...game["stats"]["p1"],
-                correct: game["stats"]["p1"]["correct"] + oneCorrect ? 1 : 0,
-                incorrect: game["stats"]["p1"]["incorrect"] + !oneCorrect ? 1 : 0
+                // correct: 1,
+                // incorrect: 0
+                correct: game["stats"]["p1"]["correct"] + (oneCorrect ? 1 : 0),
+                incorrect: game["stats"]["p1"]["incorrect"] + (!oneCorrect ? 1 : 0)
             },
             "p2": {
                 ...game["stats"]["p2"],
+                // correct: 0,
+                // incorrect: 1
                 correct: game["stats"]["p2"]["correct"] + twoCorrect ? 1 : 0,
                 incorrect: game["stats"]["p2"]["incorrect"] + !twoCorrect ? 1 : 0
             },
@@ -176,8 +189,31 @@ function checkAnswer(sysAnswer, answerOne, answerTwo) {
     }
 }
 
+function deadPlayer(deadPlayer) {
+    const foo = deadPlayer === 1 ? "p1" : "p2";
+
+    game = {
+        ...game,
+        stats: {
+            ...game["stats"],
+            [foo]: {
+                correct: 0,
+                incorrect: 0
+            }
+        }
+    }
+
+    console.log("player dead");
+    finishGame()
+}
+
 function handleMessage(message, userId) {
     const dataFromClient = JSON.parse(message.toString());
+
+    if (dataFromClient.type === typesDef.PLAYER_DEAD) {
+        const content = dataFromClient['content']
+        // deadPlayer();
+    }
 
     if (dataFromClient.type === typesDef.NEW_GAME) {
         newGame(dataFromClient['content'], userId);
@@ -252,6 +288,9 @@ function gameEnd() {
 }
 
 function joinGame(userId) {
+    // check if game exists
+    if (game === null || Object.keys(game).length === 0) return;
+
     game["players"].push(userId);
 
     if (game["players"].length === 2) gameInit();

@@ -40,6 +40,7 @@ const typesDef = {
     NEW_QUESTION: "newquestion",
     CONFIRM_TURN: "confirmturn",
     FINISH_GAME: "finishgame",
+    // SEND_ANS: "sendans",
     
 
     // player dead stuff
@@ -148,7 +149,8 @@ function nextTurn(currentTurn) {
         type: "newquestion",
         content: {
             "question": question,
-            "answer":   answer
+            "answer":   answer,
+            "oldanswer": game["qsas"][currentTurn-1]["a"]
         }
     })
 

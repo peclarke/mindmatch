@@ -102,25 +102,13 @@ export const NewQuestionListener = (props: NewQuestionListenerProps) => {
 
     const [icons, setIcons] = useState(animatedIcons);
 
-    const [hoop, setHoop] = useState(false);
+    const [hoop, setHoop]     = useState(false);
+    const [oldAns, setOldAns] = useState("");
 
     useEffect(() => {
         if (lastJsonMessage) {
-            // check lives
-            console.log(props.lives);
-            // if (props.lives[0] <= 1) {
-            //     sendJsonMessage({
-            //         type: "playerdead",
-            //         content: 1
-            //     })
-            //     return;
-            // } else if (props.lives[1] <= 1) {
-            //     sendJsonMessage({
-            //         type: "playerdead",
-            //         content: 2
-            //     })
-            //     return;
-            // }
+            console.log(lastJsonMessage);
+            setOldAns(lastJsonMessage.content.oldanswer);
 
             setIcons(animatedIcons);
 
@@ -156,7 +144,7 @@ export const NewQuestionListener = (props: NewQuestionListenerProps) => {
             })
 
             setTimeout(delayedResponse, 2000);
-            setTimeout(() => setHoop(false), 2000);
+            setTimeout(() => {setHoop(false); setOldAns("")}, 2000);
         }   
     }, [lastJsonMessage])
 
@@ -168,6 +156,9 @@ export const NewQuestionListener = (props: NewQuestionListenerProps) => {
             <></>
             <div className={!hoop ? "biganis2" : "biganis2 blackBack"}>
                 <img src="./sword-flip.png"/>
+            </div>
+            <div className={hoop ? "oldAns ans-enabled" : "oldAns ans-disabled"}>
+                <span>{oldAns}</span>
             </div>
         </>
     )

@@ -37,6 +37,7 @@ const InputButton = (props: InputButtonProps) => {
 
     useEffect(() => {
         if (lastJsonMessage) {
+            console.log(lastJsonMessage);
             setAnswer("");
         }
     }, [lastJsonMessage])

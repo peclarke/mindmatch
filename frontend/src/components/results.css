@@ -20,6 +20,35 @@ body {
     /* background-color: red; */
 }
 
+.oldAns {
+    width: 100vw;
+    position: absolute;
+    /* background-color: red; */
+}
+
+.ans-enabled {
+    display: flex;
+}
+
+.ans-disabled {
+    display: none;
+}
+
+.oldAns>:first-child {
+    background-color: white;
+    /* border-radius: 5%; */
+    padding: 3%;
+    width: 40%;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 55vh;
+    z-index: 20;
+    border: 5px solid black;
+    transition: 500ms;
+    font-size: 25px;
+}
+
 .biganis2 {
     display: flex;
     justify-content: end;

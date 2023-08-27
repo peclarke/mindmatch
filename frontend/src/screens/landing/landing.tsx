@@ -33,7 +33,10 @@ const LandingScreen = (props: LandingScreenProps) => {
                     <h2>Mind Match</h2>
                     <img src="./logo.png" alt="logo of app"/>
                     <p>Transform your study decks into thrilling challenges as you engage in real-time duels with friends.</p> <p>Embrace collaborative learning and elevate your educational experience through exciting gameplay. Join us today and revolutionize the way you learn and have fun!</p>
-                </Grid>
+                    <div style={{display: "flex", justifyContent: "center", marginTop: "5em"}}>
+                        <Button variant="contained" onClick={props.startJoining}>Join Game</Button>
+                    </div>
+               </Grid>
                 <Grid item container xs={9} columnSpacing={6} rowSpacing={5} className="decks">
                     {
                         decks.map(deck => <DeckCard deck={deck} startGame={startNewGame}/>)

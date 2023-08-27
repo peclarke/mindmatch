@@ -8,6 +8,10 @@ export default defineConfig({
     react()
   ],
   server: {
-    port: 9999
+    port: 9999,
+    host: "0.0.0.0",
+    hmr: {
+      clientPort: 9999
+    }
   }
 })

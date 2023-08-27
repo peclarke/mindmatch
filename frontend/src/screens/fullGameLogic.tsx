@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { NewGameScreen } from "./newGame";
 import Full2GameLogic from "./full2GameLogic";
 import { NameContext } from "../main";
+import LandingScreen from "./landing/landing";
 
 const FullGameLogic = () => {
     const [names, setNames] = useState(["Player 1", "Player 2"]);
@@ -18,10 +19,14 @@ const FullGameLogic = () => {
         <NameContext.Provider value={stateValue}>
             {
                 !loading && !joining
-                ? <NewGameScreen 
+                // ? <NewGameScreen 
+                //     startLoading={() => setLoading(true)}
+                //     startJoining={() => setJoining(true)}
+                // />
+                ? <LandingScreen 
                     startLoading={() => setLoading(true)}
                     startJoining={() => setJoining(true)}
-                />
+                  />
                 : <Full2GameLogic
                     joining={joining}
                 />

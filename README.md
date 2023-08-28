@@ -1,4 +1,5 @@
 # Mind Match
+### Finalist for the UQCS 2023 Hackathon
 Have you got a deck of cards? This app will help you cram your cards with your friends.
 Upload your deck and send an invite link to your friends to get started.
 

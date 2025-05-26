@@ -20,7 +20,11 @@ Back End: Vanilla JS
 ```cd server```
 ```npm install```
 ```npm run start```
-Note that the socket URL will need to be changed to your local IP.
+
+NOTE: The socket URL will need to be changed to your local IP. You can find this as an enviroment variable. 
 
 ## Screenshots
 ![Screen Shot 2023-08-28 at 1 32 28 pm](https://github.com/peclarke/mindmatch/assets/30831649/9f6bdb74-2dbf-4f45-890d-0d7f47a11c32)
+![Screenshot 2025-05-26 at 12 31 30 pm](https://github.com/user-attachments/assets/6f9b814d-1822-437d-9477-63deb50814d4)
+![Screenshot 2025-05-26 at 12 30 43 pm](https://github.com/user-attachments/assets/f7ffa6a2-228d-47c0-9c0b-af04c7478e18)
+
